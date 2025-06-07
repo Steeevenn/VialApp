@@ -35,14 +35,7 @@ public class CrearUsuario implements CreacionDeUsuario {
     // métodos para crear usuarios, por ejemplo:
 
 
-    // @PostConstruct
-    public void cargarRoles() {
-        // Crear rol para ADMINISTRADOR
 
-        Rol rolAdmin = new Rol();
-        rolAdmin.setNombre(RolNombre.ADMINISTRADOR);  // Asigna el enum correctamente
-        roleRepository.save(rolAdmin);
-    }
     @Transactional
     @Override
     public Usuario crearUsuario(CrearUsuarioDto crearUsuarioDto) {
