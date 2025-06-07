@@ -28,7 +28,7 @@ public class Recoleccion {
     private Usuario administradorAgendo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "domiciliario_asignado_id", nullable = false)
+    @JoinColumn(name = "domiciliario_asignado_id")
     private Usuario domiciliarioAsginado;
 
     @Column(name = "nombre_remitente", nullable = false, length = 100)
@@ -40,19 +40,15 @@ public class Recoleccion {
     @Column(name = "email_remitente", length = 100, nullable = false)
     private String emailRemitente;
 
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "direccion_recoleccion_id", nullable = false)
-    private Direccion direccionRecoleccion;
-
-    @Column(name = "direccion_destinatarioæ", nullable = false, length = 250)
-    private String direccionDestinatario;
+    @Column(name = "nombre_destinatario", nullable = false, length = 100)
+    private String nombreDestinatario;
 
     @Column(name = "telefono_destinatario", length = 20)
     private String telefonoDestinatario;
 
-    @Column(name = "email_destinatario", length = 100, nullable = false)
-    private String emailDestinatario;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "direccion_recoleccion_id", nullable = false)
+    private Direccion direccionRecoleccion;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "direccion_entrega_id")

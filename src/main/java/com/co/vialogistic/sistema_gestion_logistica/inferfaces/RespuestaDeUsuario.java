@@ -1,5 +1,5 @@
 package com.co.vialogistic.sistema_gestion_logistica.inferfaces;
-import com.co.vialogistic.sistema_gestion_logistica.model.dto.RespuestaUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.RespuestaUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 import org.springframework.http.HttpStatus;
 
