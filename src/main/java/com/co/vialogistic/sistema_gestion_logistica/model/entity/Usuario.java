@@ -7,15 +7,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-@Entity
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "usuarios", uniqueConstraints = {
         @UniqueConstraint(columnNames = "id"),
         @UniqueConstraint(columnNames = "email")
 })
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 public class Usuario {
 
     @Id
@@ -25,10 +25,8 @@ public class Usuario {
     @Column(nullable = false, length = 50)
     private String username;
 
-
     @Column(name = "password_hash", nullable = false, length = 250)
     private String passwordHash;
-
 
     @Column(nullable = false, length = 100)
     private String email;
@@ -42,7 +40,6 @@ public class Usuario {
     @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean activo = true;
 
-
     @CreationTimestamp
     @Column(name = "fecha_creacion", nullable = false, updatable = false, columnDefinition = "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime fechaCreacion;
@@ -50,7 +47,6 @@ public class Usuario {
     @UpdateTimestamp
     @Column(name = "fecha_actualizacion", columnDefinition = "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime fechaActualizacion;
-
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -61,11 +57,48 @@ public class Usuario {
     private Set<Rol> roles = new HashSet<>();
 
 
+    public Set<Rol> getRoles() {
+        return roles;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
 
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public void setFechaCreacion(OffsetDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public void setFechaActualizacion(OffsetDateTime fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public void setRoles(Set<Rol> roles) {
+        this.roles = roles;
+    }
 }
+

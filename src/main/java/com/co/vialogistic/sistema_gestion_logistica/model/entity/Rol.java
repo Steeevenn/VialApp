@@ -7,10 +7,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "roles")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +17,11 @@ public class Rol {
     @Column(nullable = false, unique = true, length = 15)
     private RolNombre nombre;
 
+    public RolNombre getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(RolNombre nombre) {
+        this.nombre = nombre;
+    }
 }

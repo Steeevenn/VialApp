@@ -1,0 +1,18 @@
+#services:
+# db:
+#   image: postgres:17
+#   container_name: postgres_appvial
+#   environment:
+#     POSTGRES_USER: admin
+#     POSTGRES_PASSWORD: .KairA2025.
+#     POSTGRES_DB: AppVial
+#   ports:
+#     - "5432:5432"
+#   volumes:
+##     - postgres_data:/var/lib/postgresql/data
+#  restart: unless-stopped
+# healthcheck:
+   #    test: [ "CMD-SHELL", "pg_isready -U admin -d AppVial" ]
+   #  interval: 10s
+#     timeout: 5s
+#     retries: 5

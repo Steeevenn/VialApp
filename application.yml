@@ -1,0 +1,15 @@
+#spring:
+ # datasource:
+  #  SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/AppVial
+  #  username: admin
+   # password: .KairA2025.
+#driver-class-name: org.postgresql.Driver
+#   hikari:
+#     connection-timeout: 5000
+#     maximum-pool-size: 5
+#   container_name: springboot_appvial
+#
+# depends_on:
+#   db: # Asegura que el servicio 'db' esté listo antes de iniciar 'app'
+#     condition: service_healthy # Espera a que el healthcheck de 'db' pase
+#   restart: unless-stopped

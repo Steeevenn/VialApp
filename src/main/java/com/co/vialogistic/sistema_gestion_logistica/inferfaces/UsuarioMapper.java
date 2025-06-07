@@ -1,8 +1,10 @@
-package com.co.vialogistic.sistema_gestion_logistica.model.inferfaces;
+package com.co.vialogistic.sistema_gestion_logistica.inferfaces;
 
 import com.co.vialogistic.sistema_gestion_logistica.model.dto.*;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.*;
+import com.co.vialogistic.sistema_gestion_logistica.model.enums.RolNombre;
 import org.mapstruct.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,9 +20,9 @@ public interface UsuarioMapper {
     Usuario toEntity(CrearUsuarioDto crearUsuario);
 
     // Si hay campos null, no se modifican se ignoran y quedan losd datos existentes
-    @BeanMapping(nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     //Metodo de actualizacion de usuariodto a usuario entity
-    void updateFromDto (ActualizarUsuarioDto actualizarUsuarioDto, Usuario usuario);
+    CrearUsuarioDto updateFromDto (ActualizarUsuarioDto actualizarUsuarioDto, Usuario usuario);
 
 
     //Mapeo de autenticacion de usuario
@@ -28,8 +30,7 @@ public interface UsuarioMapper {
 
 
     @Mapping(target = "roles", source ="roles", qualifiedByName /*{nombre del metodo devuelto por defecto}*/ = "mapRoles")
-    //Mapeo de usuario a respuesta de usuario
-    RespuestaUsuarioDto responseToDto (Usuario usuario);
+    RespuestaUsuarioDto usuarioToRespuestaDto(Usuario usuario);
 
 
     @Named("mapRoles")
@@ -40,5 +41,17 @@ public interface UsuarioMapper {
                 .collect(Collectors.toSet());
     }
 
+
+
+    default Rol map(RolNombre rolNombre){
+        if (rolNombre == null) return null;
+        Rol rol = new Rol();
+        rol.setNombre(rolNombre);
+        return rol;
+    }
+
+    default RolNombre map(Rol rol){
+    return rol == null ? null : rol.getNombre();
+    }
 
 }
