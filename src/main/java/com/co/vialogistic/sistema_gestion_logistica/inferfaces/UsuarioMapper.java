@@ -1,6 +1,10 @@
 package com.co.vialogistic.sistema_gestion_logistica.inferfaces;
 
-import com.co.vialogistic.sistema_gestion_logistica.model.dto.*;
+import com.co.vialogistic.sistema_gestion_logistica.dto.ActualizarUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.AutenticarUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.CrearUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.RespuestaUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.*;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.*;
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.RolNombre;
 import org.mapstruct.*;

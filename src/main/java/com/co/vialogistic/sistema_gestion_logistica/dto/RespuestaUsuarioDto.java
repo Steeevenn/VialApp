@@ -1,7 +1,6 @@
-package com.co.vialogistic.sistema_gestion_logistica.model.dto;
+package com.co.vialogistic.sistema_gestion_logistica.dto;
 
 
-import lombok.Builder;
 import java.util.*;
 
 public record RespuestaUsuarioDto(

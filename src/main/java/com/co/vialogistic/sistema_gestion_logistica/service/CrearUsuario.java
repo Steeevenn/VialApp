@@ -1,13 +1,11 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 import com.co.vialogistic.sistema_gestion_logistica.exception.RolNotFoundException;
-import com.co.vialogistic.sistema_gestion_logistica.model.dto.CrearUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.CrearUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Rol;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.CreacionDeUsuario;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.UsuarioMapper;
-import com.co.vialogistic.sistema_gestion_logistica.model.enums.RolNombre;
 import com.co.vialogistic.sistema_gestion_logistica.repository.*;
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 //security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
