@@ -3,8 +3,8 @@ import com.co.vialogistic.sistema_gestion_logistica.exception.RolNotFoundExcepti
 import com.co.vialogistic.sistema_gestion_logistica.dto.CrearUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Rol;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
-import com.co.vialogistic.sistema_gestion_logistica.inferfaces.CreacionDeUsuario;
-import com.co.vialogistic.sistema_gestion_logistica.inferfaces.UsuarioMapper;
+import com.co.vialogistic.sistema_gestion_logistica.inferfaces.creacionales.CreacionDeUsuario;
+import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.UsuarioMapper;
 import com.co.vialogistic.sistema_gestion_logistica.repository.*;
 import jakarta.transaction.Transactional;
 //security.crypto.password.PasswordEncoder;

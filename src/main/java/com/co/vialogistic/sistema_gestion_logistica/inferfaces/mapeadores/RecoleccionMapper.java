@@ -1,10 +1,10 @@
-package com.co.vialogistic.sistema_gestion_logistica.inferfaces;
+package com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores;
 
 import com.co.vialogistic.sistema_gestion_logistica.dto.CrearRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring" )
 public interface RecoleccionMapper {
@@ -20,7 +20,10 @@ public interface RecoleccionMapper {
     @Mapping(target = "historialEstados", ignore = true)
 
     //estos datos de direccion los maneja el servico de creacion de recoleccion
-    @Mapping(target ="direccionRecoleccion" , ignore = true)
-    @Mapping(target ="direccionEntrega" , ignore = true)
+    @Mapping(target ="direccionRemitente" , ignore = true)
+    @Mapping(target ="direccionDestinatario" , ignore = true)
     Recoleccion toEntity(CrearRecoleccionDto dto);
+
+    RespuestaRecoleccionDto toDto (Recoleccion recoleccion);
+
 }

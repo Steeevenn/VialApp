@@ -1,4 +1,4 @@
-package com.co.vialogistic.sistema_gestion_logistica.dto;
+package com.co.vialogistic.sistema_gestion_logistica.dto.respuestas;
 
 
 import java.util.*;
