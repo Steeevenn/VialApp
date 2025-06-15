@@ -1,6 +1,7 @@
 package com.co.vialogistic.sistema_gestion_logistica.controller;
 
 import com.co.vialogistic.sistema_gestion_logistica.dto.CrearRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.RecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.DireccionesMapper;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
@@ -88,26 +89,20 @@ public class Recoleccciones {
     }
 
     @GetMapping("/recolecciones/listarRecolecciones")
-    public List<RespuestaRecoleccionDto> listarRecolecciones() {
-        List<Recoleccion> recolecciones = recoleccionRepository.findAll();
+    public ResponseEntity<List<RecoleccionDto>> listarRecolecciones() {
+        try {
+            List<Recoleccion> recolecciones = recoleccionRepository.findAll();
 
-        return recolecciones.stream()
-                .map(recoleccion -> respuestaRecoleccionJson.respuestaRecoleccionJson(
-                        recoleccion,
-                        recoleccion.getNombreRemitente(),
-                        recoleccion.getTelefonoRemitente(),
-                        recoleccion.getEmailRemitente(),
-                        direccionesMapper.toDto(recoleccion.getDireccionRemitente()),
-                        recoleccion.getNombreDestinatario(),
-                        recoleccion.getTelefonoDestinatario(),
-                        direccionesMapper.toDto(recoleccion.getDireccionDestinatario()),
-                        recoleccion.getDescripcionPaquete(),
-                        recoleccion.getPesoKg(),
-                        recoleccion.getAltoCm(),
-                        recoleccion.getAnchoCm(),
-                        recoleccion.getLargoCm(),
-                        recoleccion.getNotasAdministrador()
-                ))
-                .collect(Collectors.toList());
+            // Mapear cada entidad a DTO usando el mapper
+            List<RecoleccionDto> recoleccionDtos = recolecciones.stream()
+                    .map(recoleccionMapper::toDto)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(recoleccionDtos);
+        } catch (Exception e) {
+            // Manejar errores adecuadamente
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
     }
 }

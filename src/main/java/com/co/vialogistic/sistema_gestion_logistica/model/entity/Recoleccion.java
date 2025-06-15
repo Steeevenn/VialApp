@@ -25,7 +25,7 @@ public class Recoleccion {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "administrador_agendo_id", nullable = false)
-    private Usuario administradorAgendo;
+    private Usuario usuarioAgendoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "domiciliario_asignado_id")
@@ -112,12 +112,13 @@ public class Recoleccion {
         this.id = id;
     }
 
-    public Usuario getAdministradorAgendo() {
-        return administradorAgendo;
+
+    public Usuario getUsuarioAgendoId() {
+        return usuarioAgendoId;
     }
 
-    public void setAdministradorAgendo(Usuario administradorAgendo) {
-        this.administradorAgendo = administradorAgendo;
+    public void setUsuarioAgendoId(Usuario usuarioAgendoId) {
+        this.usuarioAgendoId = usuarioAgendoId;
     }
 
     public Usuario getDomiciliarioAsginado() {
@@ -296,7 +297,7 @@ public class Recoleccion {
     public String toString() {
         return "Recoleccion{" +
                 "id=" + id +
-                ", administradorAgendo=" + administradorAgendo +
+                ", usuarioAgendoId=" + usuarioAgendoId +
                 ", domiciliarioAsginado=" + domiciliarioAsginado +
                 ", nombreRemitente='" + nombreRemitente + '\'' +
                 ", telefonoRemitente='" + telefonoRemitente + '\'' +

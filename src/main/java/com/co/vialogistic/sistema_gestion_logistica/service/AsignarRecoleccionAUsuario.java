@@ -3,6 +3,7 @@ package com.co.vialogistic.sistema_gestion_logistica.service;
 import com.co.vialogistic.sistema_gestion_logistica.repository.RecoleccionRepository;
 import com.co.vialogistic.sistema_gestion_logistica.repository.UsuarioRepository;
 
+
 public class AsignarRecoleccionAUsuario {
 
     private final UsuarioRepository usuarioRepository;
@@ -12,6 +13,11 @@ public class AsignarRecoleccionAUsuario {
         this.usuarioRepository = usuarioRepository;
         this.recoleccionRepository = recoleccionRepository;
     }
+
+
+
+
+
 
 
 

@@ -63,7 +63,7 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
         Recoleccion recoleccion = recoleccionMapper.toEntity(crearRecoleccionDto);
 
         recoleccion.setDireccionRemitente(direccionRemitente);
-        recoleccion.setAdministradorAgendo(administrador);
+        recoleccion.setUsuarioAgendoId(administrador);
         recoleccion.setNombreRemitente(crearRecoleccionDto.nombreRemitente());
         recoleccion.setTelefonoRemitente(crearRecoleccionDto.telefonoRemitente());
         recoleccion.setEmailRemitente(crearRecoleccionDto.emailRemitente());
