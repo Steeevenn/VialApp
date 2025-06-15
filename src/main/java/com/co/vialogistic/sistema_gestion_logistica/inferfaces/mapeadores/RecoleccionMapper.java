@@ -1,8 +1,7 @@
 package com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.CrearRecoleccionDto;
-import com.co.vialogistic.sistema_gestion_logistica.dto.RecoleccionDto;
-import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 import org.mapstruct.Mapper;
@@ -27,7 +26,7 @@ public interface RecoleccionMapper {
     Recoleccion toEntity(CrearRecoleccionDto dto);
 
 
-    RecoleccionDto toDto (Recoleccion recoleccion);
+    RespuestaListarRecoleccionesDto toDto (Recoleccion recoleccion);
 
 
     default Long map(Usuario value) {

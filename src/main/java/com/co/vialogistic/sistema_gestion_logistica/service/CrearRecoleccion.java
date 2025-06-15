@@ -1,7 +1,7 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 
 import com.co.vialogistic.sistema_gestion_logistica.controller.Usuarios;
-import com.co.vialogistic.sistema_gestion_logistica.dto.CrearRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.creacionales.CreacionDeRecoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Direccion;

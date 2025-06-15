@@ -1,8 +1,7 @@
 package com.co.vialogistic.sistema_gestion_logistica.controller;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.CrearRecoleccionDto;
-import com.co.vialogistic.sistema_gestion_logistica.dto.RecoleccionDto;
-import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.DireccionesMapper;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
@@ -12,10 +11,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,14 +21,14 @@ public class Recoleccciones {
 
     private final CrearRecoleccion crearRecoleccion;
     private final RecoleccionRepository recoleccionRepository;
-    private final RespuestaRecoleccionJson respuestaRecoleccionJson;
+    private final RespuestaListarRecoleccion respuestaListarRecoleccion;
     private final RecoleccionMapper recoleccionMapper;
     private final DireccionesMapper direccionesMapper;
 
-    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RespuestaRecoleccionJson respuestaRecoleccionJson, RecoleccionMapper recoleccionMapper, DireccionesMapper direccionesMapper) {
+    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RespuestaListarRecoleccion respuestaListarRecoleccion, RecoleccionMapper recoleccionMapper, DireccionesMapper direccionesMapper) {
         this.crearRecoleccion = crearRecoleccion;
         this.recoleccionRepository = recoleccionRepository;
-        this.respuestaRecoleccionJson = respuestaRecoleccionJson;
+        this.respuestaListarRecoleccion = respuestaListarRecoleccion;
         this.recoleccionMapper = recoleccionMapper;
         this.direccionesMapper = direccionesMapper;
     }
@@ -89,16 +86,16 @@ public class Recoleccciones {
     }
 
     @GetMapping("/recolecciones/listarRecolecciones")
-    public ResponseEntity<List<RecoleccionDto>> listarRecolecciones() {
+    public ResponseEntity<List<RespuestaListarRecoleccionesDto>> listarRecolecciones() {
         try {
             List<Recoleccion> recolecciones = recoleccionRepository.findAll();
 
             // Mapear cada entidad a DTO usando el mapper
-            List<RecoleccionDto> recoleccionDtos = recolecciones.stream()
+            List<RespuestaListarRecoleccionesDto> respuestaListarRecoleccionesDtos = recolecciones.stream()
                     .map(recoleccionMapper::toDto)
                     .collect(Collectors.toList());
 
-            return ResponseEntity.ok(recoleccionDtos);
+            return ResponseEntity.ok(respuestaListarRecoleccionesDtos);
         } catch (Exception e) {
             // Manejar errores adecuadamente
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

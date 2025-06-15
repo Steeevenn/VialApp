@@ -1,12 +1,11 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.CrearUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarUsuariosDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.UsuarioMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 import com.co.vialogistic.sistema_gestion_logistica.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,15 +21,11 @@ public class ListarUsuarios implements com.co.vialogistic.sistema_gestion_logist
     }
 
     @Override
-    public List<Usuario> getUsuarios() {
-        List<CrearUsuarioDto> listaConUsuariosDto = new ArrayList<>();
-        List<Usuario> totalUsuarios = usuarioRepository.findAll();
+    public List<RespuestaListarUsuariosDto> obtenerTodosLosUsuarios() {
 
-        for(Usuario usuario : totalUsuarios){
+        return usuarioRepository.findAll().stream()
+                .map(usuarioMapper::usuarioToRespuestaListarDto)
+                .toList();
 
-
-        }
-
-return null;
     }
 }

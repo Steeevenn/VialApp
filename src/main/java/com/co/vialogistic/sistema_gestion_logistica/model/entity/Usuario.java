@@ -64,6 +64,38 @@ public class Usuario {
         return id;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public OffsetDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public OffsetDateTime getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
