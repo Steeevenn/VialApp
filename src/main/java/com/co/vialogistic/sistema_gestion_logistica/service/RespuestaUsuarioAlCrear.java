@@ -1,9 +1,9 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.RespuestaUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.RespuestaDeUsuario;
-import com.co.vialogistic.sistema_gestion_logistica.inferfaces.UsuarioMapper;
+import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.UsuarioMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 

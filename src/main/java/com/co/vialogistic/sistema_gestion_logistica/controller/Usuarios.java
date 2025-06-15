@@ -1,7 +1,7 @@
 package com.co.vialogistic.sistema_gestion_logistica.controller;
 
 import com.co.vialogistic.sistema_gestion_logistica.dto.CrearUsuarioDto;
-import com.co.vialogistic.sistema_gestion_logistica.dto.RespuestaUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.exception.RolNotFoundException;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.*;
 import com.co.vialogistic.sistema_gestion_logistica.service.CrearUsuario;
@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -60,4 +61,9 @@ public class Usuarios  {
         }
     }
 
+    @GetMapping("/usuarios/listar")
+    public List<RespuestaUsuarioDto> totalUsuarios (){
+
+        return null;
+    }
 }

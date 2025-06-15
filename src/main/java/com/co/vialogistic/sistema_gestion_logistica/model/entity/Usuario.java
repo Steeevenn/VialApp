@@ -8,7 +8,6 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "usuarios", uniqueConstraints = {
@@ -59,6 +58,10 @@ public class Usuario {
 
     public Set<Rol> getRoles() {
         return roles;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
