@@ -26,6 +26,7 @@ public interface RecoleccionMapper {
     Recoleccion toEntity(CrearRecoleccionDto dto);
 
 
+    @Mapping(target = "idRecoleccion", source ="id")
     RespuestaListarRecoleccionesDto toDto (Recoleccion recoleccion);
 
 

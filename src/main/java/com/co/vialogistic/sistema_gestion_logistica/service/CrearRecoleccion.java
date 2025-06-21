@@ -60,6 +60,8 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
             throw new RuntimeException("El usuairio no es administrador");
         }
 
+
+
         Recoleccion recoleccion = recoleccionMapper.toEntity(crearRecoleccionDto);
 
         recoleccion.setDireccionRemitente(direccionRemitente);

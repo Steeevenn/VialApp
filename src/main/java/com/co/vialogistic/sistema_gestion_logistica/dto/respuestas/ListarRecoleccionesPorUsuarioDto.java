@@ -1,16 +1,15 @@
 package com.co.vialogistic.sistema_gestion_logistica.dto.respuestas;
 
-
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.DireccionDto;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-public record RespuestaListarRecoleccionesDto(
+public record ListarRecoleccionesPorUsuarioDto(
         //Provisional mientras se implementa spring security
-        @NotNull Long usuarioAgendoId,
-        @NotNull Long idRecoleccion,
+        @NotNull Long UsuarioAgendoId,
+        @NotBlank String domiciliarioAsignado,
         @NotBlank String nombreRemitente,
         @NotBlank String telefonoRemitente,
         @NotBlank @Email String emailRemitente,
@@ -25,6 +24,29 @@ public record RespuestaListarRecoleccionesDto(
         @NotNull @DecimalMin("0.01") BigDecimal altoCm,
         @NotNull @DecimalMin("0.01") BigDecimal anchoCm,
         @NotNull @DecimalMin("0.01") BigDecimal largoCm,
-        String notasAdministrador
+        String notasAdministrador,
+        String notasDomiciliario
+
 ) {
+    public ListarRecoleccionesPorUsuarioDto conDomiciliarioAsginado (String domiciliarioAsginado){
+        return new ListarRecoleccionesPorUsuarioDto
+                (UsuarioAgendoId,
+                        domiciliarioAsginado,
+                nombreRemitente,
+                telefonoRemitente,
+                emailRemitente,
+                direccionRemitente,
+                nombreDestinatario,
+                telefonoDestinatario,
+                direccionDestinatario,
+                fechaHoraProgramadaRecoleccion,
+                descripcionPaquete,
+                pesoKg,
+                altoCm,
+                anchoCm,
+                largoCm,
+                notasAdministrador,
+                notasDomiciliario
+                );
+    }
 }

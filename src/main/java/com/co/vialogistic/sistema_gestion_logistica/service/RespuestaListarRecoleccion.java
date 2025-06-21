@@ -18,6 +18,7 @@ public class RespuestaListarRecoleccion implements RespuestaDeRecoleccion {
         // Lógica de construcción de la respuesta
         return new RespuestaListarRecoleccionesDto(
                 datos.usuarioAgendoId(),
+                datos.idRecoleccion(),
                 datos.nombreRemitente(),
                 datos.telefonoRemitente(),
                 datos.emailRemitente(),
