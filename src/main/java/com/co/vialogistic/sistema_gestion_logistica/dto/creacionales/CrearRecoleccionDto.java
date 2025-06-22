@@ -1,6 +1,4 @@
-package com.co.vialogistic.sistema_gestion_logistica.dto;
-
-import com.co.vialogistic.sistema_gestion_logistica.model.entity.Direccion;
+package com.co.vialogistic.sistema_gestion_logistica.dto.creacionales;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -10,6 +8,7 @@ public record CrearRecoleccionDto(
 
         //Provisional mientras se implementa spring security
         @NotNull Long UsuarioAgendoId,
+        @NotBlank String domiciliarioAsignado,
         @NotBlank String nombreRemitente,
         @NotBlank String telefonoRemitente,
         @NotBlank @Email String emailRemitente,
@@ -26,4 +25,6 @@ public record CrearRecoleccionDto(
         @NotNull @DecimalMin("0.01") BigDecimal largoCm,
         String notasAdministrador
 ) {
+
+
 }

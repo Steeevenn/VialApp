@@ -1,13 +1,13 @@
 package com.co.vialogistic.sistema_gestion_logistica.dto.respuestas;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.DireccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.DireccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.EstadoRecoleccion;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-public record RespuestaRecoleccionDto(
+public record RespuestaCreacionRecoleccionDto(
         Long administradorAgendoId,
         Usuario DomiciliarioAsinado,
         EstadoRecoleccion estadoRecoleccion,

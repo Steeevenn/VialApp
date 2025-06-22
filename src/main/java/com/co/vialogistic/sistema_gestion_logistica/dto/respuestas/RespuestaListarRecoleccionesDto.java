@@ -1,14 +1,16 @@
-package com.co.vialogistic.sistema_gestion_logistica.dto;
+package com.co.vialogistic.sistema_gestion_logistica.dto.respuestas;
 
+
+import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.DireccionDto;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
-public record RecoleccionDto(
+public record RespuestaListarRecoleccionesDto(
         //Provisional mientras se implementa spring security
         @NotNull Long usuarioAgendoId,
+        @NotNull Long idRecoleccion,
         @NotBlank String nombreRemitente,
         @NotBlank String telefonoRemitente,
         @NotBlank @Email String emailRemitente,

@@ -1,4 +1,4 @@
-package com.co.vialogistic.sistema_gestion_logistica.dto;
+package com.co.vialogistic.sistema_gestion_logistica.dto.creacionales;
 
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.TipoVia;
 import jakarta.validation.constraints.*;

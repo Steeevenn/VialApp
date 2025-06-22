@@ -1,6 +1,6 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaCreacionUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.RespuestaDeUsuario;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.UsuarioMapper;
@@ -16,12 +16,12 @@ public class RespuestaUsuarioAlCrear implements RespuestaDeUsuario {
     }
 
     @Override
-    public RespuestaUsuarioDto construirRespuestaUsuario(Usuario usuario, HttpStatus status, String mensaje, String error) {
+    public RespuestaCreacionUsuarioDto construirRespuestaUsuario(Usuario usuario, HttpStatus status, String mensaje, String error) {
 
-        RespuestaUsuarioDto respuestaBase  = usuarioMapper.usuarioToRespuestaDto(usuario);
+        RespuestaCreacionUsuarioDto respuestaBase  = usuarioMapper.usuarioToRespuestaDto(usuario);
 
         // Crear una nueva instancia del DTO con los campos adicionales
-        return new RespuestaUsuarioDto(
+        return new RespuestaCreacionUsuarioDto(
                 status.value(),
                 respuestaBase.usuario(),
                 mensaje,
@@ -33,8 +33,8 @@ public class RespuestaUsuarioAlCrear implements RespuestaDeUsuario {
     }
 
     @Override
-    public RespuestaUsuarioDto construirRespuestaError(String username, String email, HttpStatus status, String mensaje, String error) {
-        return new RespuestaUsuarioDto(
+    public RespuestaCreacionUsuarioDto construirRespuestaError(String username, String email, HttpStatus status, String mensaje, String error) {
+        return new RespuestaCreacionUsuarioDto(
                 status.value(),
                 username,
                 mensaje,

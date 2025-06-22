@@ -1,31 +1,24 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.DireccionDto;
-import com.co.vialogistic.sistema_gestion_logistica.dto.RecoleccionDto;
-import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.RespuestaDeRecoleccion;
-import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
-import com.co.vialogistic.sistema_gestion_logistica.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
 @Service
-public class RespuestaRecoleccionJson implements RespuestaDeRecoleccion {
+public class RespuestaListarRecoleccion implements RespuestaDeRecoleccion {
 
 
     @Override
-    public RecoleccionDto respuestaRecoleccionJson(RecoleccionDto datos) {
+    public RespuestaListarRecoleccionesDto respuestaRecoleccionJson(RespuestaListarRecoleccionesDto datos) {
         return construirRespuesta(datos);
     }
 
-    private RecoleccionDto construirRespuesta(RecoleccionDto datos) {
+    private RespuestaListarRecoleccionesDto construirRespuesta(RespuestaListarRecoleccionesDto datos) {
+
         // Lógica de construcción de la respuesta
-
-
-
-        return new RecoleccionDto(
+        return new RespuestaListarRecoleccionesDto(
                 datos.usuarioAgendoId(),
+                datos.idRecoleccion(),
                 datos.nombreRemitente(),
                 datos.telefonoRemitente(),
                 datos.emailRemitente(),
