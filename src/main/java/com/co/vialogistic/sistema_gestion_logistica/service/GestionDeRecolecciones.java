@@ -2,10 +2,12 @@ package com.co.vialogistic.sistema_gestion_logistica.service;
 
 import com.co.vialogistic.sistema_gestion_logistica.controller.Recoleccciones;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
+import com.co.vialogistic.sistema_gestion_logistica.exception.AgendadorDeDomiciliarioException;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.EstadoRecoleccion;
+import com.co.vialogistic.sistema_gestion_logistica.model.enums.RolNombre;
 import com.co.vialogistic.sistema_gestion_logistica.repository.RecoleccionRepository;
 import com.co.vialogistic.sistema_gestion_logistica.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,45 +30,43 @@ public class GestionDeRecolecciones {
         this.recoleccionRepository = recoleccionRepository;
         this.recoleccionMapper = recoleccionMapper;
     }
-
     @Transactional
     public void AsignarRecoleccionAUsuario(Long idUsuarioQueAsigno, Long idDomiciliario, Long idRecoleccion) {
 
-    //Obtener domiciliario como entidad
+        // 1. Validar existencia del domiciliario
         Usuario domiciliario = usuarioRepository.findById(idDomiciliario)
-                .orElseThrow(() -> new EntityNotFoundException("Domiciliario no encontrado"));
-
-        //Traer la lista de recoelcciones que un usuario en especifico agendo
-        List <Recoleccion> recolecciones = recoleccionRepository.listarRecoleccionesPorUsuario(
-                idUsuarioQueAsigno,
-                EstadoRecoleccion.PENDIENTE_ASIGNACION
-                );
+                .stream().filter(r -> r.getRoles().stream()
+                        .anyMatch(rol -> rol.getNombre().equals(RolNombre.DOMICILIARIO)))
+                .findFirst()
+                .orElseThrow(()->new  AgendadorDeDomiciliarioException(idDomiciliario));
 
 
-        //Iterar sobre las recolecciones que el usuario x agendo y modificar el domicialiaio asginado
-                recolecciones.forEach(
-                        n ->{
-                            if(n.getId().equals(idRecoleccion)){
-                            n.setDomiciliarioAsginado(domiciliario);
-                            n.setEstadoRecoleccion(EstadoRecoleccion.ASIGNADA);}
+        List<Recoleccion> recoleccionFiltrada = recoleccionRepository.listarRecoleccionesPorUsuario(idUsuarioQueAsigno,EstadoRecoleccion.PENDIENTE_ASIGNACION)
+                .stream()
+                .filter(r -> r.getId().equals(idRecoleccion))
+                .toList();
+
+        // 2. Verificar si se encontró la recolección
+        if (recoleccionFiltrada.isEmpty()) {
+            throw new AgendadorDeDomiciliarioException(
+                    "Recolección no encontrada o no está pendiente de asignación para este usuario"
+            );
+        }
+
+        // 3. Asignar y actualizar
+        recoleccionFiltrada.forEach(m -> {
+                            m.setDomiciliarioAsginado(domiciliario);
+                            m.setEstadoRecoleccion(EstadoRecoleccion.ASIGNADA);
                         });
-
-
-        System.out.println("Domiciliaroo asginado con el id : " + domiciliario.getId());
-        //Traer el estado de la recoleccion
-                    recolecciones.forEach(n -> n.setEstadoRecoleccion(EstadoRecoleccion.ASIGNADA));
-         recoleccionRepository.saveAll(recolecciones);
-
+         recoleccionRepository.saveAll(recoleccionFiltrada);
     }
 
 
     public List<RespuestaListarRecoleccionesDto> ListaRecolecciones(Long idUsuarioQueAsigno, EstadoRecoleccion estadoRecoleccion){
 
-
         return recoleccionRepository.listarRecoleccionesPorUsuario(idUsuarioQueAsigno,EstadoRecoleccion.PENDIENTE_ASIGNACION).stream()
                 .map(recoleccionMapper::toDto)
                 .collect(Collectors.toList());
-
 
     }
 
