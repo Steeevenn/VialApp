@@ -1,5 +1,6 @@
 package com.co.vialogistic.sistema_gestion_logistica.controller;
 
+import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ActualizarEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.DireccionesMapper;
@@ -21,21 +22,18 @@ public class Recoleccciones {
 
     private final CrearRecoleccion crearRecoleccion;
     private final RecoleccionRepository recoleccionRepository;
-    private final RespuestaListarRecoleccion respuestaListarRecoleccion;
     private final RecoleccionMapper recoleccionMapper;
-    private final DireccionesMapper direccionesMapper;
 
-    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RespuestaListarRecoleccion respuestaListarRecoleccion, RecoleccionMapper recoleccionMapper, DireccionesMapper direccionesMapper) {
+    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper) {
         this.crearRecoleccion = crearRecoleccion;
         this.recoleccionRepository = recoleccionRepository;
-        this.respuestaListarRecoleccion = respuestaListarRecoleccion;
         this.recoleccionMapper = recoleccionMapper;
-        this.direccionesMapper = direccionesMapper;
+
     }
 
 
-    @RequestMapping("/recolecciones/crear")
-    public ResponseEntity<Recoleccion> crearRecoleccion(@RequestBody @Valid CrearRecoleccionDto crearRecoleccionDto) {
+    @PostMapping("/recolecciones/crear")
+    public ResponseEntity<ActualizarEstadoRecoleccionDto> crearRecoleccion(@RequestBody @Valid CrearRecoleccionDto crearRecoleccionDto) {
 
         // Debug completo del DTO recibido
         System.out.println("=== DEBUGGING DTO RECIBIDO ===");
@@ -67,9 +65,10 @@ public class Recoleccciones {
         System.out.println("Peso: " + crearRecoleccionDto.pesoKg());
         System.out.println("================================");
 
-        Recoleccion recoleccionCreada = null;
+        ActualizarEstadoRecoleccionDto recoleccionCreada = null;
         try {
-            recoleccionCreada = crearRecoleccion.crearRecoleccion(crearRecoleccionDto);
+            recoleccionCreada = recoleccionMapper.toActualizarRecolecciones(crearRecoleccion.crearRecoleccion(crearRecoleccionDto));
+          //  recoleccionCreada = crearRecoleccion.crearRecoleccion(crearRecoleccionDto);
         } catch (Exception e) {
             System.err.println("Error al crear recolección: " + e.getMessage());
             e.printStackTrace();
@@ -77,7 +76,7 @@ public class Recoleccciones {
         }
 
         if (recoleccionCreada != null) {
-            System.out.println("Recolección creada exitosamente: " + recoleccionCreada.getId());
+            System.out.println("Recolección creada exitosamente: " + recoleccionCreada.idRecoleccion());
             return ResponseEntity.status(HttpStatus.CREATED).body(recoleccionCreada);
         } else {
             System.err.println("La recolección creada es null");
@@ -102,4 +101,6 @@ public class Recoleccciones {
                     .body(Collections.emptyList());
         }
     }
+
+
 }
