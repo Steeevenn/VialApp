@@ -20,15 +20,19 @@ public class Asignaciones{
         this.asignarRecoleccionAUsuario = asignarRecoleccionAUsuario;
     }
 //Controlador que asigna un domiciliario a un id de recoleccion especifica
+
     @PostMapping("/asignar")
     public ResponseEntity<?> asignarRecolecciones(
             @RequestParam Long idUsuarioAsignador,
             @RequestParam Long idDomiciliario,
             @RequestParam Long idRecoleccion
-    ) {
-        asignarRecoleccionAUsuario.AsignarRecoleccionAUsuario(idUsuarioAsignador, idDomiciliario,   idRecoleccion);
-        return ResponseEntity.ok().build();
-    }
+    )
+
+    {
+        asignarRecoleccionAUsuario.AsignarRecoleccionAUsuario(idUsuarioAsignador, idDomiciliario, idRecoleccion);
+            return ResponseEntity.ok().build();
+        }
+
 
 //Controlador para listar el total de reccolecciones que un usuario realizo para posteriormente mostrar o devolver para asginar cada recoleccion
 

@@ -13,21 +13,15 @@ import java.util.Optional;
 @Transactional
 public class CrearOReutilizarDirecciones {
 
-
 private final DireccionesRepository direccionesRepository;
 private final DireccionesMapper direccionesMapper;
-
-
 
     public CrearOReutilizarDirecciones(DireccionesRepository direccionesRepository, DireccionesMapper direccionesMapper) {
         this.direccionesRepository = direccionesRepository;
         this.direccionesMapper = direccionesMapper;
 
     }
-
-
     public Direccion crearOReutilizarDirecciones(DireccionDto direccionDto) {
-
 
         Optional <Direccion> direccionExistente = direccionesRepository.findByCamposUnicos(
                 direccionDto.tipoVia(),
@@ -38,7 +32,6 @@ private final DireccionesMapper direccionesMapper;
                 direccionDto.barrio()
 
         );
-
         return direccionExistente.orElseGet(() ->{
             Direccion nuevaDireccion = direccionesMapper.toEntity(direccionDto);
 
