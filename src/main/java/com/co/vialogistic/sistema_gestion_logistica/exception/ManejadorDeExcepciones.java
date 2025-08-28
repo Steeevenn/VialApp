@@ -12,4 +12,11 @@ public class ManejadorDeExcepciones {
     public ResponseEntity<String> manejadorAsinacionesUsuarios(AgendadorDeDomiciliarioException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+
+    public ResponseEntity<String> rolNotFoundEx(RolNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+
 }

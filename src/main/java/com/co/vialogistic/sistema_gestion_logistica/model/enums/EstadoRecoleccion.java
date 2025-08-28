@@ -5,7 +5,7 @@ public enum EstadoRecoleccion {
     ASIGNADA,
     EN_RUTA_RECOLECCION,
     RECOGIDA,
-    ENTREGADA,
+    EN_BODEGA,
     INCIDENCIA_RECOLECCION,
     CANCELADA,
 }

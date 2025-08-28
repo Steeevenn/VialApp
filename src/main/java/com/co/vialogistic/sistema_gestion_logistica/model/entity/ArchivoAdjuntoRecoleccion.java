@@ -47,4 +47,78 @@ public class ArchivoAdjuntoRecoleccion {
     @CreationTimestamp
     @Column(name = "fecha_subida", nullable = false, updatable = false, columnDefinition = "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime fechaSubida;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Recoleccion getRecoleccion() {
+        return recoleccion;
+    }
+
+    public void setRecoleccion(Recoleccion recoleccion) {
+        this.recoleccion = recoleccion;
+    }
+
+    public TipoArchivo getTipoArchivo() {
+        return tipoArchivo;
+    }
+
+    public void setTipoArchivo(TipoArchivo tipoArchivo) {
+        this.tipoArchivo = tipoArchivo;
+    }
+
+    public String getUrlArchivo() {
+        return urlArchivo;
+    }
+
+    public void setUrlArchivo(String urlArchivo) {
+        this.urlArchivo = urlArchivo;
+    }
+
+    public String getNombreOriginalArchivo() {
+        return nombreOriginalArchivo;
+    }
+
+    public void setNombreOriginalArchivo(String nombreOriginalArchivo) {
+        this.nombreOriginalArchivo = nombreOriginalArchivo;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public Long getTamanoBytes() {
+        return tamanoBytes;
+    }
+
+    public void setTamanoBytes(Long tamanoBytes) {
+        this.tamanoBytes = tamanoBytes;
+    }
+
+    public Usuario getSubidoPorUsuario() {
+        return subidoPorUsuario;
+    }
+
+    public void setSubidoPorUsuario(Usuario subidoPorUsuario) {
+        this.subidoPorUsuario = subidoPorUsuario;
+
+    }
+
+    public OffsetDateTime getFechaSubida() {
+        return fechaSubida;
+    }
+
+    public void setFechaSubida(OffsetDateTime fechaSubida) {
+        this.fechaSubida = fechaSubida;
+    }
 }
