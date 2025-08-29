@@ -34,11 +34,9 @@ public void AgregarArchivosAdjuntosARecoleccion(Long recoleccionId, MultipartFil
             .orElseThrow(() -> new RuntimeException("Recolección no encontrada con id: " + recoleccionId));
 
 
-
     if (recoleccion.getDomiciliarioAsginado() == null || !recoleccion.getDomiciliarioAsginado().getId().equals(domiciliarioQueSube)) {
         throw new RuntimeException("Acción no autorizada. Esta recolección no está asignada a usted.");
     }
-
 
     //Usuario que subio los archvivos adjuntos de una recoleccion
     Optional<Usuario> usuarioQueSube  = usuarioRepository.findById(domiciliarioQueSube);

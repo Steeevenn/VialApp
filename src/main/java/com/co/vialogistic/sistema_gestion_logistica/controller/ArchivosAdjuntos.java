@@ -19,27 +19,23 @@ import java.util.Optional;
 @RequestMapping("/api/v1/archivos")
 public class ArchivosAdjuntos {
 
-    private final ArchivoStorageService archivoStorageService;
     private final AgregarArchivosAdjuntos agregarArchivosAdjuntos;
-    private final RecoleccionRepository recoleccionRepository;
 
-    public ArchivosAdjuntos(ArchivoStorageService archivoStorageService, AgregarArchivosAdjuntos agregarArchivosAdjuntos, RecoleccionRepository recoleccionRepository) {
-        this.archivoStorageService = archivoStorageService;
+    public ArchivosAdjuntos( AgregarArchivosAdjuntos agregarArchivosAdjuntos) {
         this.agregarArchivosAdjuntos = agregarArchivosAdjuntos;
-        this.recoleccionRepository = recoleccionRepository;
     }
 
      @PutMapping("/adjuntarArchivo")
     public ResponseEntity<String> actualizarArchivos(ArchivosAdjuntosDto archvivosAdjuntosDto, MultipartFile archivo) {
 
-          String  rutaArchivoGuardado = archivoStorageService.guardarArchivo( archivo, archvivosAdjuntosDto.urlArchivo());
+//Llamada a servicio para generar los archvios en local y guardar la referencia a la base de datos
 
-
-
-         agregarArchivosAdjuntos.AgregarArchivosAdjuntosARecoleccion(archvivosAdjuntosDto.recoleccionId(), archivo, TipoArchivo.FOTO_PAQUETE, archvivosAdjuntosDto.domiciliarioQueSube());
-
-
-         return ResponseEntity.status(HttpStatus.CREATED).body(rutaArchivoGuardado);
+         agregarArchivosAdjuntos.AgregarArchivosAdjuntosARecoleccion(
+                 archvivosAdjuntosDto.recoleccionId(),
+                 archivo, TipoArchivo.FOTO_PAQUETE,
+                 archvivosAdjuntosDto.domiciliarioQueSube()
+         );
+         return ResponseEntity.status(HttpStatus.CREATED).body("Archivo adjunto creado correctamente");
      }
 
 
