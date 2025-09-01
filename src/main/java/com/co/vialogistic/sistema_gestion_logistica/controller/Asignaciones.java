@@ -34,14 +34,5 @@ public class Asignaciones{
         }
 
 
-//Controlador para listar el total de reccolecciones que un usuario realizo para posteriormente mostrar o devolver para asginar cada recoleccion
 
-    @GetMapping("/listarRecolecciones/usuario")
-    public ResponseEntity<List<RespuestaListarRecoleccionesDto>> listarRecolecciones(@RequestParam Long idUsuarioAsignador){
-        List<RespuestaListarRecoleccionesDto> recolecciones = asignarRecoleccionAUsuario.ListaRecolecciones
-                (idUsuarioAsignador, EstadoRecoleccion.PENDIENTE_ASIGNACION);
-
-        return ResponseEntity.status(200).body(recolecciones);
-
-    }
 }

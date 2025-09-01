@@ -25,7 +25,7 @@ public class GestionDeRecolecciones {
     private final RecoleccionRepository recoleccionRepository;
     private final RecoleccionMapper recoleccionMapper;
 
-    public GestionDeRecolecciones(UsuarioRepository usuarioRepository, RecoleccionRepository recoleccionRepository, Recoleccciones recoleccciones, RecoleccionMapper recoleccionMapper) {
+    public GestionDeRecolecciones(UsuarioRepository usuarioRepository, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper) {
         this.usuarioRepository = usuarioRepository;
         this.recoleccionRepository = recoleccionRepository;
         this.recoleccionMapper = recoleccionMapper;
@@ -61,8 +61,9 @@ public class GestionDeRecolecciones {
          recoleccionRepository.saveAll(recoleccionFiltrada);
     }
 
+    // Servicio para listar recolecciones de un usuario especifico
 
-    public List<RespuestaListarRecoleccionesDto> ListaRecolecciones(Long idUsuarioQueAsigno, EstadoRecoleccion estadoRecoleccion){
+    public List<RespuestaListarRecoleccionesDto> ListaRecolecciones(Long idUsuarioQueAsigno, EstadoRecoleccion estadoRecoleccion ){
 
         return recoleccionRepository.listarRecoleccionesPorUsuario(idUsuarioQueAsigno,EstadoRecoleccion.PENDIENTE_ASIGNACION).stream()
                 .map(recoleccionMapper::toDto)

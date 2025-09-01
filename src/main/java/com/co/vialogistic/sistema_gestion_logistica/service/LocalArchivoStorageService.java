@@ -24,7 +24,7 @@ public class LocalArchivoStorageService implements ArchivoStorageService {
     public String guardarArchivo(MultipartFile file, String subfolder) {
         try {
             // Generar un nombre de archivo único para evitar colisiones
-            String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+            String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename().replaceAll("\\s+", "_")));
             String uniqueFilename = UUID.randomUUID() + "_" + originalFilename;
 
             Path uploadPath = Paths.get(uploadDir, subfolder);

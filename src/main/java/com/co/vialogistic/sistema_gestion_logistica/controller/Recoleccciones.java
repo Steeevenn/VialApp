@@ -6,6 +6,7 @@ import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecole
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.DireccionesMapper;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
+import com.co.vialogistic.sistema_gestion_logistica.model.enums.EstadoRecoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.repository.RecoleccionRepository;
 import com.co.vialogistic.sistema_gestion_logistica.service.*;
 import jakarta.validation.Valid;
@@ -23,11 +24,13 @@ public class Recoleccciones {
     private final CrearRecoleccion crearRecoleccion;
     private final RecoleccionRepository recoleccionRepository;
     private final RecoleccionMapper recoleccionMapper;
+    private final GestionDeRecolecciones gestionDeRecolecciones;
 
-    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper) {
+    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper, GestionDeRecolecciones gestionDeRecolecciones) {
         this.crearRecoleccion = crearRecoleccion;
         this.recoleccionRepository = recoleccionRepository;
         this.recoleccionMapper = recoleccionMapper;
+        this.gestionDeRecolecciones = gestionDeRecolecciones;
 
     }
 
@@ -101,6 +104,15 @@ public class Recoleccciones {
                     .body(Collections.emptyList());
         }
     }
+//Controlador para listar el total de reccolecciones que un usuario agendo para posteriormente mostrar o devolver para asginar cada recoleccion
 
+    @GetMapping("/listarRecolecciones/usuario")
+    public ResponseEntity<List<RespuestaListarRecoleccionesDto>> listarRecolecciones(@RequestParam Long idUsuarioAsignador){
+        List<RespuestaListarRecoleccionesDto> recolecciones = gestionDeRecolecciones.ListaRecolecciones
+                (idUsuarioAsignador, EstadoRecoleccion.PENDIENTE_ASIGNACION);
+
+        return ResponseEntity.status(200).body(recolecciones);
+
+    }
 
 }
