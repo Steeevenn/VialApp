@@ -1,9 +1,11 @@
 package com.co.vialogistic.sistema_gestion_logistica.controller;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ActualizarEstadoRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.CrearRecoleccionById;
+import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ModificarEstadoRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearHistorialEstadoDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaHistorialEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
-import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.DireccionesMapper;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.EstadoRecoleccion;
@@ -11,10 +13,15 @@ import com.co.vialogistic.sistema_gestion_logistica.repository.RecoleccionReposi
 import com.co.vialogistic.sistema_gestion_logistica.service.*;
 import jakarta.validation.Valid;
 import org.springframework.http.*;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,18 +32,21 @@ public class Recoleccciones {
     private final RecoleccionRepository recoleccionRepository;
     private final RecoleccionMapper recoleccionMapper;
     private final GestionDeRecolecciones gestionDeRecolecciones;
+    private final HistorialEstadoService historialEstadoService;
 
-    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper, GestionDeRecolecciones gestionDeRecolecciones) {
+    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper, GestionDeRecolecciones gestionDeRecolecciones, HistorialEstadoService historialEstadoService) {
         this.crearRecoleccion = crearRecoleccion;
         this.recoleccionRepository = recoleccionRepository;
         this.recoleccionMapper = recoleccionMapper;
         this.gestionDeRecolecciones = gestionDeRecolecciones;
+        this.historialEstadoService = historialEstadoService;
 
     }
 
 
     @PostMapping("/recolecciones/crear")
-    public ResponseEntity<ActualizarEstadoRecoleccionDto> crearRecoleccion(@RequestBody @Valid CrearRecoleccionDto crearRecoleccionDto) {
+    //public ResponseEntity<ActualizarEstadoRecoleccionDto> crearRecoleccion(@RequestBody @Valid CrearRecoleccionDto crearRecoleccionDto) {
+    public ResponseEntity<CrearRecoleccionDto> crearRecoleccion(@RequestBody @Valid CrearRecoleccionDto crearRecoleccionDto) {
 
         // Debug completo del DTO recibido
         System.out.println("=== DEBUGGING DTO RECIBIDO ===");
@@ -68,7 +78,7 @@ public class Recoleccciones {
         System.out.println("Peso: " + crearRecoleccionDto.pesoKg());
         System.out.println("================================");
 
-        ActualizarEstadoRecoleccionDto recoleccionCreada = null;
+        CrearRecoleccionDto recoleccionCreada = null;
         try {
             recoleccionCreada = recoleccionMapper.toActualizarRecolecciones(crearRecoleccion.crearRecoleccion(crearRecoleccionDto));
           //  recoleccionCreada = crearRecoleccion.crearRecoleccion(crearRecoleccionDto);
@@ -112,6 +122,29 @@ public class Recoleccciones {
                 (idUsuarioAsignador, EstadoRecoleccion.PENDIENTE_ASIGNACION);
 
         return ResponseEntity.status(200).body(recolecciones);
+
+    }
+
+
+/* endpoint para modificar estado de las recolecciones y que automaticamente se suban los estados a estados de recoleccion*/
+    @PutMapping("recolecciones/{recoleccionId}/modificar/estado")
+    public ResponseEntity<RespuestaHistorialEstadoRecoleccionDto> modificarEstadosRecoleccion (@PathVariable Long recoleccionId,
+             @Valid @RequestBody CrearHistorialEstadoDto crearHistorialEstadoDto){
+        //Validar que el idRecoleccion sea coherente en el parametro del metodo y lo que llega desde fuera
+        if(!Objects.equals(recoleccionId, crearHistorialEstadoDto.recoleccionId())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"La recoleccionId de la ruta no coincide con el id del cuerpo ");
+        }
+
+        RespuestaHistorialEstadoRecoleccionDto rep = historialEstadoService.creacionHistorialEstado(crearHistorialEstadoDto);
+
+        //Obejeto uri con la direccion del recurso creado
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{eventoId}")
+                .buildAndExpand(rep.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(rep);
 
     }
 

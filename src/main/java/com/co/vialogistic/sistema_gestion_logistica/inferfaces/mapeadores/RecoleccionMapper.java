@@ -1,6 +1,6 @@
 package com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ActualizarEstadoRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.CrearRecoleccionById;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
@@ -27,7 +27,10 @@ public interface RecoleccionMapper {
     Recoleccion toEntity(CrearRecoleccionDto dto);
 
     @Mapping(target = "idRecoleccion", source ="id")
-    ActualizarEstadoRecoleccionDto toActualizarRecolecciones(Recoleccion recoleccion);
+    CrearRecoleccionById toActualizarRecoleccion(Recoleccion recoleccion);
+
+    @Mapping(target = "idRecoleccion", source ="id")
+    CrearRecoleccionDto toActualizarRecolecciones(Recoleccion recoleccion);
 
     @Mapping(target = "idRecoleccion", source ="id")
     RespuestaListarRecoleccionesDto toDto (Recoleccion recoleccion);

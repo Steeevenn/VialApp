@@ -36,7 +36,7 @@ public class GestionarArchivosAdjuntos {
     }
 
 
-public void     AgregarArchivosAdjuntosARecoleccion(Long recoleccionId, MultipartFile file, TipoArchivo tipoArchivo, @NotBlank Long domiciliarioQueSube, String notasDomiciliario){
+public void  AgregarArchivosAdjuntosARecoleccion(Long recoleccionId, MultipartFile file, TipoArchivo tipoArchivo, @NotBlank Long domiciliarioQueSube, String notasDomiciliario){
 
         // 1. Buscar la recolección directamente por su ID ()
     Recoleccion recoleccion = recoleccionRepository.findById(recoleccionId)
@@ -98,9 +98,6 @@ public void     AgregarArchivosAdjuntosARecoleccion(Long recoleccionId, Multipar
     //recoleccionRepository.save(recoleccion);
 
     // Opcionalmente, si no usas Cascade, guardas el adjunto directamente:
-
-
-
 }
     public List<ArchivoAdjuntoRecoleccionDto> obtenerArchivosPorRecoleccion(Long recoleccionId) {
         List<ArchivoAdjuntoRecoleccion> archivoRecoleccion =  archivoAdjuntosRepository.findByRecoleccionId(recoleccionId);
@@ -115,6 +112,11 @@ public void     AgregarArchivosAdjuntosARecoleccion(Long recoleccionId, Multipar
                 .map(this::mapearArchivoADto)
                 .collect(Collectors.toList());
 
+    }
+
+    /* Metodo para obtener el archivio de cierta recoleccion independiente para usarlo en el endpoint que me muestra los archvios adjuntos*/
+    public ArchivoAdjuntoRecoleccionDto obtenerArchivoPorId(Long id) {
+        return archivoAdjuntosRepository.findById(id).map(this::mapearArchivoADto).orElse(null);
     }
 
     private ArchivoAdjuntoRecoleccionDto mapearArchivoADto(ArchivoAdjuntoRecoleccion archivo) {
