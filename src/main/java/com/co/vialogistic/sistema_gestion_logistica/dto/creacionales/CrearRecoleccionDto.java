@@ -7,6 +7,7 @@ import java.time.OffsetDateTime;
 public record CrearRecoleccionDto(
 
         //Provisional mientras se implementa spring security
+         @NotNull Long idRecoleccion,
         @NotNull Long UsuarioAgendoId,
         @NotBlank String domiciliarioAsignado,
         @NotBlank String nombreRemitente,

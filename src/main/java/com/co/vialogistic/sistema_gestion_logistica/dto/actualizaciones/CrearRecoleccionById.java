@@ -6,7 +6,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-public record ActualizarEstadoRecoleccionDto(
+public record CrearRecoleccionById(
         //Provisional mientras se implementa spring security
         @NotNull Long idRecoleccion,
         @NotNull Long usuarioAgendoId,

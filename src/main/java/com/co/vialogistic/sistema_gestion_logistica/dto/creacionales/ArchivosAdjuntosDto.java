@@ -6,11 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import javax.validation.constraints.NotBlank;
 
 public record ArchivosAdjuntosDto(
-
       @NotBlank Long recoleccionId,
       @NotBlank Long domiciliarioQueSube,
-      @NotNull String urlArchivo
-
+      @NotNull String urlArchivo,
+      @NotNull String notasDomiciliario
 
 ) {
 }
