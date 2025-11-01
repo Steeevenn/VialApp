@@ -8,6 +8,7 @@
     import com.co.vialogistic.sistema_gestion_logistica.repository.HistorialEstadoRecoleccionRepository;
     import com.co.vialogistic.sistema_gestion_logistica.repository.RecoleccionRepository;
     import com.co.vialogistic.sistema_gestion_logistica.repository.UsuarioRepository;
+    import jakarta.transaction.Transactional;
     import org.springframework.stereotype.Service;
 
     import java.util.List;
@@ -28,6 +29,20 @@
             this.usuarioRepository = usuarioRepository;
         }
 
+
+
+        @Transactional
+        public void eliminarEstadoRecoleccion( Long recoleccionId, Long estadoId){
+
+
+            HistorialEstadoRecoleccion historial = historialRepository
+                    .findByIdAndRecoleccionId(recoleccionId, estadoId)
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "No existe historial con ese id para la recolección dada"));
+
+            historialRepository.delete(historial);
+        ;
+        }
 
 
         public RespuestaHistorialEstadoRecoleccionDto creacionHistorialEstado(CrearHistorialEstadoDto dto){
