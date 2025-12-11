@@ -298,7 +298,7 @@ public class Recoleccion {
         return "Recoleccion{" +
                 "id=" + id +
                 ", usuarioAgendoId=" + usuarioAgendoId +
-                ", domiciliarioAsginado=" + domiciliarioAsginado +
+                ", domiciliarioAsignado=" + domiciliarioAsginado +
                 ", nombreRemitente='" + nombreRemitente + '\'' +
                 ", telefonoRemitente='" + telefonoRemitente + '\'' +
                 ", emailRemitente='" + emailRemitente + '\'' +

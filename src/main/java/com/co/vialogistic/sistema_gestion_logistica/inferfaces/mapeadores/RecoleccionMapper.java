@@ -12,7 +12,6 @@ import org.mapstruct.Mapping;
 public interface RecoleccionMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "domiciliarioAsginado", ignore = true) // Campo en la entidad
     @Mapping(target = "fechaHoraProgramadaRecoleccion", dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX")
     @Mapping(target = "estadoRecoleccion", ignore = true)
     @Mapping(target = "notasDomiciliario", ignore = true)
@@ -20,7 +19,6 @@ public interface RecoleccionMapper {
     @Mapping(target = "fechaActualizacion", ignore = true)
     @Mapping(target = "archivosAdjuntos", ignore = true)
     @Mapping(target = "historialEstados", ignore = true)
-
     //estos datos de direccion los maneja el servico de creacion de recoleccion
     @Mapping(target ="direccionRemitente" , ignore = true)
     @Mapping(target ="direccionDestinatario" , ignore = true)

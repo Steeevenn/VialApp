@@ -4,8 +4,8 @@ import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 
 public class UsuarioNotFoundException extends RuntimeException{
 
-    public UsuarioNotFoundException(Usuario usuario) {
-        super("Usuario " + usuario.getUsername() + "no encontrado" );
+    public UsuarioNotFoundException(String message) {
+        super( message);
     }
 }
 
