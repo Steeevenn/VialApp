@@ -1,8 +1,7 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 
-import com.co.vialogistic.sistema_gestion_logistica.controller.Recoleccciones;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
-import com.co.vialogistic.sistema_gestion_logistica.exception.AgendadorDeDomiciliarioException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.AgendadorDeDomiciliarioException;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
@@ -10,12 +9,10 @@ import com.co.vialogistic.sistema_gestion_logistica.model.enums.EstadoRecoleccio
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.RolNombre;
 import com.co.vialogistic.sistema_gestion_logistica.repository.RecoleccionRepository;
 import com.co.vialogistic.sistema_gestion_logistica.repository.UsuarioRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

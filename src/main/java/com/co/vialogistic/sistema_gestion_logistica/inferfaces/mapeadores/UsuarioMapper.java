@@ -45,6 +45,7 @@ public interface UsuarioMapper {
 
     @Named("mapRoles")
     default Set<String> mapRoles(Set<Rol> roles){
+
         return roles.stream()
                 .map(Rol::getNombre)
                 .map(Enum::name)
@@ -57,6 +58,7 @@ public interface UsuarioMapper {
          * - Ejemplo: [Rol{id=1, nombre=ADMIN}, Rol{id=2, nombre=USER}]
          *           → ["ADMIN", "USER"]
          */
+
     }
 
 

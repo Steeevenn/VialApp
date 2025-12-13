@@ -28,21 +28,13 @@ private final DireccionesMapper direccionesMapper;
                 direccionDto.numeroViaPrincipal(),
                 direccionDto.numeroPlaca(),
                 direccionDto.complemento(),
-                direccionDto.ciudad(),
-                direccionDto.barrio()
-
-        );
+                direccionDto.barrio(),
+                direccionDto.ciudad()
+                );
         return direccionExistente.orElseGet(() ->{
             Direccion nuevaDireccion = direccionesMapper.toEntity(direccionDto);
-
                     return direccionesRepository.save(nuevaDireccion);
         });
 
     }
-
-
-
-
-
-
 }
