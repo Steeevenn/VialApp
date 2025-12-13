@@ -2,8 +2,6 @@ package com.co.vialogistic.sistema_gestion_logistica.controller;
 
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.*;
-import com.co.vialogistic.sistema_gestion_logistica.exception.RolNotFoundException;
-import com.co.vialogistic.sistema_gestion_logistica.exception.UsuarioNotFoundException;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.*;
 import com.co.vialogistic.sistema_gestion_logistica.service.*;
 import jakarta.validation.Valid;
@@ -15,7 +13,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1")
-public class Usuarios  {
+public class Usuarios {
 
     private final CrearUsuario crearUsuarioService;
     private final RespuestaUsuarioAlCrear respuestaUsuarioAlCrear;
@@ -30,67 +28,40 @@ public class Usuarios  {
     }
 
     @PostMapping("/usuarios/registrar")
-    public ResponseEntity<RespuestaCreacionUsuarioDto> registrarUsuario (@RequestBody @Valid CrearUsuarioDto crearUsuarioDto) {
+    public ResponseEntity<RespuestaCreacionUsuarioDto> registrarUsuario(@RequestBody @Valid CrearUsuarioDto crearUsuarioDto) {
         //Intento de creacion de usuario
-        try {
 
-            // Crear el usuario y obtener la entidad creada
-            Usuario usuarioCreado = crearUsuarioService.crearUsuario(crearUsuarioDto);
+        // Crear el usuario y obtener la entidad creada
+        Usuario usuarioCreado = crearUsuarioService.crearUsuario(crearUsuarioDto);
 
-            RespuestaCreacionUsuarioDto respuesta = respuestaUsuarioAlCrear.construirRespuestaUsuario(
-                    usuarioCreado, HttpStatus.CREATED, "Usuario creado exitosamente", null);
+        RespuestaCreacionUsuarioDto respuesta = respuestaUsuarioAlCrear.construirRespuestaUsuario(
+                usuarioCreado, HttpStatus.CREATED, "Usuario creado exitosamente", null);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
 
-        } catch (RolNotFoundException e) {
-            RespuestaCreacionUsuarioDto respuesta = respuestaUsuarioAlCrear.construirRespuestaError(
-                    crearUsuarioDto.username(),
-                    crearUsuarioDto.email(),
-                    HttpStatus.BAD_REQUEST,
-                    e.getMessage(),
-                    "Rol no valido"
-            );
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
-        } catch (Exception e) {
-            RespuestaCreacionUsuarioDto respuesta = respuestaUsuarioAlCrear.construirRespuestaError(
-                    crearUsuarioDto.username(),
-                    crearUsuarioDto.email(),
-                    HttpStatus.BAD_REQUEST,
-                    e.getMessage(),
-                    "Error interno del servidor"
-            );
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
+        return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
 
-        }
     }
+
 
     @GetMapping("/usuarios/listar")
-    public ResponseEntity<List<RespuestaListarUsuariosDto>> totalUsuarios () {
-        List<RespuestaListarUsuariosDto> usuarios = new ArrayList<>();
-        try {
-           usuarios = listarUsuariosService.obtenerTodosLosUsuarios();
-            return ResponseEntity.ok(usuarios);
-        } catch (UsuarioNotFoundException e) {
-            e.getMessage();
+    public ResponseEntity<List<RespuestaListarUsuariosDto>> totalUsuarios() {
+        List<RespuestaListarUsuariosDto> usuarios;
 
-        }
-            return ResponseEntity.status(HttpStatus.OK).body(usuarios);
+        usuarios = listarUsuariosService.obtenerTodosLosUsuarios();
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(usuarios);
     }
-
 
 
     @DeleteMapping("/usuarios/deleteById/{id}")
-    public ResponseEntity<?> eliminarUsuario (@PathVariable("id") Long idUsuario) {
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable("id") Long idUsuario) {
 
-            try{
-                eliminarUsuarioService.eliminarUsuarios(idUsuario);
-                return  ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
-            }
-            catch(Exception e){
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-            }
+        eliminarUsuarioService.eliminarUsuarios(idUsuario);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+
 
     }
 }
-

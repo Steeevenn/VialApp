@@ -2,6 +2,7 @@ package com.co.vialogistic.sistema_gestion_logistica.service;
 
 import com.co.vialogistic.sistema_gestion_logistica.controller.Usuarios;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.DireccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.creacionales.CreacionDeRecoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Direccion;
@@ -35,16 +36,36 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
     }
 
 
+ private boolean mismaDireccion(Direccion d, DireccionDto dto){
 
+        return d.getTipoVia() == dto.tipoVia()
+                && iguales(d.getNumeroViaPrincipal(), dto.numeroViaPrincipal())
+                && iguales(d.getNumeroPlaca(), dto.numeroPlaca())
+                && iguales(d.getComplemento(), dto.complemento())
+                && iguales(d.getBarrio(), dto.barrio())
+                && iguales(d.getCodigoPostal(), dto.codigoPostal())
+                && iguales(d.getCiudad(), dto.ciudad())
+                && iguales(d.getReferenciasAdicionales(), dto.referenciasAdicionales());
+ }
+
+
+ private boolean iguales(String a, String b){
+
+        if(a == null && b == null) return true;
+        if(a == null || b == null) return false;
+
+        return a.trim().equals(b.trim());
+ }
     @Override
     @Transactional
     public Recoleccion crearRecoleccion(CrearRecoleccionDto crearRecoleccionDto) {
 
+
+
         //Convertir Dtos a entidades tipo direccion
+
         Direccion direccionRemitente = crearOReutilizarDirecciones.crearOReutilizarDirecciones(crearRecoleccionDto.direccionRemitente());
         Direccion direccionDestinatario = crearOReutilizarDirecciones.crearOReutilizarDirecciones(crearRecoleccionDto.direccionDestinatario());
-        direccionRemitente = direccionesRepository.save(direccionRemitente);
-        direccionDestinatario = direccionesRepository.save(direccionDestinatario);
 
 
         //Provisional mientras se impelenta spring security para traer el usaruioo del contexto de seguridad
@@ -60,11 +81,13 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
             throw new RuntimeException("El usuairio no es administrador");
         }
 
-
-
         Recoleccion recoleccion = recoleccionMapper.toEntity(crearRecoleccionDto);
 
         recoleccion.setDireccionRemitente(direccionRemitente);
+        //validacion de igualdad
+        boolean remitenteIgual = mismaDireccion(direccionRemitente, crearRecoleccionDto.direccionRemitente());
+        System.out.println("¿Remitente misma dirección que DTO? " + remitenteIgual);
+
         recoleccion.setUsuarioAgendoId(administrador);
         recoleccion.setNombreRemitente(crearRecoleccionDto.nombreRemitente());
         recoleccion.setTelefonoRemitente(crearRecoleccionDto.telefonoRemitente());
@@ -73,6 +96,12 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
         recoleccion.setNombreDestinatario(crearRecoleccionDto.nombreDestinatario());
         recoleccion.setTelefonoDestinatario(crearRecoleccionDto.telefonoDestinatario());
         recoleccion.setDireccionDestinatario(direccionDestinatario);
+
+        boolean destinatarioIgual = mismaDireccion(direccionDestinatario, crearRecoleccionDto.direccionDestinatario());
+        System.out.println("¿Destinatario misma dirección que DTO? " + destinatarioIgual);
+
+
+
 
         recoleccion.setFechaHoraProgramadaRecoleccion(crearRecoleccionDto.fechaHoraProgramadaRecoleccion());
         recoleccion.setDescripcionPaquete(crearRecoleccionDto.descripcionPaquete());

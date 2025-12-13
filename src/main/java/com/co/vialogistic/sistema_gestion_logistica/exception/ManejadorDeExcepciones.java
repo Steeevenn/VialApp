@@ -1,22 +1,70 @@
 package com.co.vialogistic.sistema_gestion_logistica.exception;
 
+import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.InvalidateEmailException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RolNotFoundException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+import java.time.OffsetDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestControllerAdvice
 public class ManejadorDeExcepciones {
 
-    @ExceptionHandler(AgendadorDeDomiciliarioException.class)
-    public ResponseEntity<String> manejadorAsinacionesUsuarios(AgendadorDeDomiciliarioException ex){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+
+
+
+    @ExceptionHandler(UsuarioNotFoundException.class)
+    public ResponseEntity<?> handleUsuarioNotFound (UsuarioNotFoundException ex){
+
+        return buildErrorResponse(
+         HttpStatus.NOT_FOUND,
+                "USUARIO NO ENCONTRADO",
+                ex.getMessage()
+            );
     }
 
 
-    public ResponseEntity<String> rolNotFoundEx(RolNotFoundException ex){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    @ExceptionHandler(InvalidateEmailException.class)
+    public ResponseEntity<?> handleEmailUsuario(InvalidateEmailException invalidateEmail){
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "EMAIL INVALIDO",
+                invalidateEmail.getMessage()
+        );
+
     }
 
+    public ResponseEntity<?> rolNotFoundEx(RolNotFoundException ex){
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                "ROL NO VALIDO",
+                ex.getMessage()
+        );
+    }
+
+
+
+
+
+    private ResponseEntity<Map<String, Object>> buildErrorResponse(
+            HttpStatus status,
+            String errorCode,
+            String message
+    ){
+
+        Map<String, Object> body  = new HashMap<>();
+        body.put("timestamp", OffsetDateTime.now());
+        body.put("status", status.value());
+        body.put("Error Code", errorCode);
+        body.put("Message", message);
+
+        return ResponseEntity.status(status).body(body);
+    }
 
 }

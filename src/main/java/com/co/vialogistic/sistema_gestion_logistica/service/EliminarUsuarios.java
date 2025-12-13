@@ -1,6 +1,6 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 
-import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
+import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotFoundException;
 import com.co.vialogistic.sistema_gestion_logistica.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +14,13 @@ public class EliminarUsuarios {
     }
 
     public void eliminarUsuarios(Long usuarioById) {
-        usuarioRepository.deleteById(usuarioById);
+
+        if(usuarioRepository.existsById(usuarioById)){
+            usuarioRepository.deleteById(usuarioById);
+
+        }else{
+
+            throw new UsuarioNotFoundException(usuarioById);
+        }
     }
 }

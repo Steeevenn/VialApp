@@ -2,6 +2,7 @@ package com.co.vialogistic.sistema_gestion_logistica.controller;
 
 
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearHistorialEstadoDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.EliminarEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaHistorialEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.service.HistorialEstadoService;
 import jakarta.validation.Valid;
@@ -26,29 +27,6 @@ public class HistorialEstadoRecoleccion {
     public HistorialEstadoRecoleccion( HistorialEstadoService historialEstadoService ) {
         this.historialEstadoService = historialEstadoService;
     }
-/*
-    @PostMapping("recolecciones/{recoleccionId}/historial/estados")
-    public ResponseEntity<RespuestaHistorialEstadoRecoleccionDto> CrearHistorialEstadosRecoleccion( @PathVariable Long recoleccionId,
-                                                                                                   @Valid @RequestBody CrearHistorialEstadoDto dto){
-
-        //Validar que el idRecoleccion sea coherente en el parametro del metodo y lo que llega desde fuera
-        if(!Objects.equals(recoleccionId, dto.recoleccionId())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"La recoleccionId de la ruta no coincide con el id del cuerpo ");
-        }
-
-
-        RespuestaHistorialEstadoRecoleccionDto rep = historialEstadoService.creacionHistorialEstado(dto);
-
-        //Obejeto uri con la direccion del recurso creado
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{eventoId}")
-                .buildAndExpand(rep.id())
-                .toUri();
-
-        return ResponseEntity.created(location).body(rep);
-
-*/
 
  @GetMapping(value= ("/recolecciones/{recoleccionId}/historial"), produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RespuestaHistorialEstadoRecoleccionDto>> MostrarHistorialEstadosDeRecoleccion(@PathVariable Long recoleccionId){
@@ -62,6 +40,15 @@ public class HistorialEstadoRecoleccion {
            return ResponseEntity.ok(historialDto);
     }
 
+    @DeleteMapping("estado/{estadoId}/eliminar/recolecciones/{recoleccionId}")
+    public ResponseEntity<Void> eliminarEstadoRecoleccion(@PathVariable Long recoleccionId, @PathVariable Long estadoId){
 
 
-}
+        historialEstadoService.eliminarEstadoRecoleccion(recoleccionId, estadoId);
+
+        return ResponseEntity.noContent().build();
+
+
+
+    }
+ }

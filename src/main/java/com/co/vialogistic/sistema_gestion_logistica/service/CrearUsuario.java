@@ -1,6 +1,7 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
-import com.co.vialogistic.sistema_gestion_logistica.exception.RolNotFoundException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RolNotFoundException;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearUsuarioDto;
+import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.InvalidateEmailException;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Rol;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.creacionales.CreacionDeUsuario;
@@ -11,6 +12,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,8 +35,6 @@ public class CrearUsuario implements CreacionDeUsuario {
     }
     // métodos para crear usuarios, por ejemplo:
 
-
-
     @Transactional
     @Override
     public Usuario crearUsuario(CrearUsuarioDto crearUsuarioDto) {
@@ -44,10 +45,10 @@ public class CrearUsuario implements CreacionDeUsuario {
              Set<Rol>roles = crearUsuarioDto.roles().stream()
             .map(rolNombre -> roleRepository.findByNombre(rolNombre)
                             .orElseThrow(() -> new RolNotFoundException(rolNombre)))
-
             .collect(Collectors.toSet());
 
-             //Creacion del usuario medianete el obj Mapper
+             // 3.Creacion del usuario medianete el obj Mapper
+
              Usuario usuario = usuarioMapper.toEntity(crearUsuarioDto);
              usuario.setPasswordHash(passwordHash);
              usuario.setEmail(crearUsuarioDto.email());
@@ -55,7 +56,27 @@ public class CrearUsuario implements CreacionDeUsuario {
              usuario.setTelefono(crearUsuarioDto.telefono());
              usuario.setRoles(roles);
 
-        usuarioRepository.save(usuario);
-        return usuario;
+             // 4. Metodo de validacion para evitar emails duplicados
+         validarEmailUsuario(usuario);
+
+        return usuarioRepository.save(usuario);
+    }
+
+    private  void validarEmailUsuario( Usuario usuario) {
+
+        List<Usuario> usuarioList = usuarioRepository.findAll();
+
+        List<String> correosActivos = usuarioList.stream()
+                .map(Usuario::getEmail)
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .distinct()
+                .toList();
+        for(String correo : correosActivos) {
+            if(correo.equalsIgnoreCase(usuario.getEmail())){
+              throw new InvalidateEmailException("Usuario con ese correo ya existe");
+            }
+        }
+
     }
 }

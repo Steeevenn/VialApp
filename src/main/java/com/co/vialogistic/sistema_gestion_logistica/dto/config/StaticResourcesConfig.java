@@ -1,4 +1,4 @@
-package com.co.vialogistic.sistema_gestion_logistica.config;
+package com.co.vialogistic.sistema_gestion_logistica.dto.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
