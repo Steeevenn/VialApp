@@ -49,6 +49,7 @@ public class Usuarios {
 
         usuarios = listarUsuariosService.obtenerTodosLosUsuarios();
 
+
         return ResponseEntity.status(HttpStatus.OK).body(usuarios);
     }
 
