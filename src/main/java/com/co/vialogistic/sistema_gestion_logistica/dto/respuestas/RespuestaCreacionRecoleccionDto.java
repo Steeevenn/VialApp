@@ -14,7 +14,6 @@ public record RespuestaCreacionRecoleccionDto(
         OffsetDateTime fechaHoraProgramadaRecoleccion,
         OffsetDateTime fechaCreacion,
 
-
         String nombreRemitente,
         String telefonoRemitente,
         String emailRemitente,

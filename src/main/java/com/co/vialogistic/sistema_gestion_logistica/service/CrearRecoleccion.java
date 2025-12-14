@@ -3,6 +3,8 @@ package com.co.vialogistic.sistema_gestion_logistica.service;
 import com.co.vialogistic.sistema_gestion_logistica.controller.Usuarios;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.DireccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotAdminException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotFoundException;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.creacionales.CreacionDeRecoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Direccion;
@@ -56,13 +58,12 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
 
         return a.trim().equals(b.trim());
  }
+
     @Override
     @Transactional
     public Recoleccion crearRecoleccion(CrearRecoleccionDto crearRecoleccionDto) {
 
-
-
-        //Convertir Dtos a entidades tipo direccion
+        //Conversor de objetos dto a entidad DIRECCION con validacion interna de duplicado de direcciones
 
         Direccion direccionRemitente = crearOReutilizarDirecciones.crearOReutilizarDirecciones(crearRecoleccionDto.direccionRemitente());
         Direccion direccionDestinatario = crearOReutilizarDirecciones.crearOReutilizarDirecciones(crearRecoleccionDto.direccionDestinatario());
@@ -72,13 +73,13 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
         Long idUsuarioAgendo = crearRecoleccionDto.UsuarioAgendoId();
 
         Usuario administrador = usuarioRepository.findById(idUsuarioAgendo)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
 
         boolean esAdmin =  administrador.getRoles().stream()
                 .anyMatch(rol -> rol.getNombre().equals(RolNombre.ADMINISTRADOR));
 
         if (!esAdmin){
-            throw new RuntimeException("El usuairio no es administrador");
+            throw new UsuarioNotAdminException("El usuairio no es administrador");
         }
 
         Recoleccion recoleccion = recoleccionMapper.toEntity(crearRecoleccionDto);
@@ -100,9 +101,6 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
         boolean destinatarioIgual = mismaDireccion(direccionDestinatario, crearRecoleccionDto.direccionDestinatario());
         System.out.println("¿Destinatario misma dirección que DTO? " + destinatarioIgual);
 
-
-
-
         recoleccion.setFechaHoraProgramadaRecoleccion(crearRecoleccionDto.fechaHoraProgramadaRecoleccion());
         recoleccion.setDescripcionPaquete(crearRecoleccionDto.descripcionPaquete());
         recoleccion.setPesoKg(crearRecoleccionDto.pesoKg());
@@ -111,8 +109,11 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
         recoleccion.setLargoCm(crearRecoleccionDto.largoCm());
         recoleccion.setNotasAdministrador(crearRecoleccionDto.notasAdministrador());
 
+        if(recoleccion == null){
+
+        }
+
         //Guardar recoleccion en la bd
-        System.out.println("Datos guardado en la base de datos campo reolecciones: " + recoleccion  );
         recoleccionRepository.save(recoleccion);
 
     return recoleccion;
