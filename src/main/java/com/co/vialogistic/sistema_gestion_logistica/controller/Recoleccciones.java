@@ -34,14 +34,15 @@ public class Recoleccciones {
     private final RecoleccionMapper recoleccionMapper;
     private final GestionDeRecolecciones gestionDeRecolecciones;
     private final HistorialEstadoService historialEstadoService;
+    private final RespuestaListarRecoleccion respuestaListarRecoleccion;
 
-    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper, GestionDeRecolecciones gestionDeRecolecciones, HistorialEstadoService historialEstadoService) {
+    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper, GestionDeRecolecciones gestionDeRecolecciones, HistorialEstadoService historialEstadoService, RespuestaListarRecoleccion respuestaListarRecoleccion) {
         this.crearRecoleccion = crearRecoleccion;
         this.recoleccionRepository = recoleccionRepository;
         this.recoleccionMapper = recoleccionMapper;
         this.gestionDeRecolecciones = gestionDeRecolecciones;
         this.historialEstadoService = historialEstadoService;
-
+        this.respuestaListarRecoleccion = respuestaListarRecoleccion;
     }
 
 
@@ -50,7 +51,6 @@ public class Recoleccciones {
     public ResponseEntity<CrearRecoleccionDto> crearRecoleccion(@RequestBody @Valid CrearRecoleccionDto crearRecoleccionDto) {
 
         CrearRecoleccionDto recoleccionCreada = recoleccionMapper.toActualizarRecolecciones(crearRecoleccion.crearRecoleccion(crearRecoleccionDto));
-
 
         if(!(recoleccionCreada == null)){
             return ResponseEntity.status(201).body(recoleccionCreada);
@@ -62,20 +62,10 @@ public class Recoleccciones {
 
     @GetMapping("/recolecciones/listarRecolecciones")
     public ResponseEntity<List<RespuestaListarRecoleccionesDto>> listarRecolecciones() {
-        try {
-            List<Recoleccion> recolecciones = recoleccionRepository.findAll();
 
-            // Mapear cada entidad a DTO usando el mapper
-            List<RespuestaListarRecoleccionesDto> respuestaListarRecoleccionesDtos = recolecciones.stream()
-                    .map(recoleccionMapper::toDto)
-                    .collect(Collectors.toList());
+        List<RespuestaListarRecoleccionesDto> recolecionesAll = gestionDeRecolecciones.listarRecoleccionesAll();
+        return ResponseEntity.ok(recolecionesAll);
 
-            return ResponseEntity.ok(respuestaListarRecoleccionesDtos);
-        } catch (Exception e) {
-            // Manejar errores adecuadamente
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.emptyList());
-        }
     }
 //Controlador para listar el total de reccolecciones que un usuario agendo para posteriormente mostrar o devolver para asginar cada recoleccion
 

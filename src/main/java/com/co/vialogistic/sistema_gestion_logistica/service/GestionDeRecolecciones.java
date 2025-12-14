@@ -2,6 +2,8 @@ package com.co.vialogistic.sistema_gestion_logistica.service;
 
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.AgendadorDeDomiciliarioException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RecoleccionNotExistException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotAdminException;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
@@ -12,6 +14,8 @@ import com.co.vialogistic.sistema_gestion_logistica.repository.UsuarioRepository
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,6 +72,20 @@ public class GestionDeRecolecciones {
 
     }
 
+    public List<RespuestaListarRecoleccionesDto> listarRecoleccionesAll(){
+
+        List<Recoleccion> listaRecoleccionesTotal = recoleccionRepository.findAll();
+        if(listaRecoleccionesTotal.isEmpty()){
+            throw new RecoleccionNotExistException("No hay recolecciones asignadas");
+        }
+
+        List <RespuestaListarRecoleccionesDto> respuestaListaRecoleccionesDto = listaRecoleccionesTotal.stream()
+                .map(recoleccionMapper::toDto)
+                .toList();
+
+        return respuestaListaRecoleccionesDto;
+
+    }
 
 
 
