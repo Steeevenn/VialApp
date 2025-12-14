@@ -3,6 +3,7 @@ package com.co.vialogistic.sistema_gestion_logistica.controller;
 import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.CrearRecoleccionById;
 import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ModificarEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearHistorialEstadoDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaCreacionRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaHistorialEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
@@ -48,53 +49,15 @@ public class Recoleccciones {
     //public ResponseEntity<ActualizarEstadoRecoleccionDto> crearRecoleccion(@RequestBody @Valid CrearRecoleccionDto crearRecoleccionDto) {
     public ResponseEntity<CrearRecoleccionDto> crearRecoleccion(@RequestBody @Valid CrearRecoleccionDto crearRecoleccionDto) {
 
-        // Debug completo del DTO recibido
-        System.out.println("=== DEBUGGING DTO RECIBIDO ===");
-        System.out.println("UsuarioAgendoId: " + crearRecoleccionDto.UsuarioAgendoId());
-        System.out.println("Nombre remitente: " + crearRecoleccionDto.nombreRemitente());
-        System.out.println("Teléfono remitente: " + crearRecoleccionDto.telefonoRemitente());
-        System.out.println("Email remitente: " + crearRecoleccionDto.emailRemitente());
+        CrearRecoleccionDto recoleccionCreada = recoleccionMapper.toActualizarRecolecciones(crearRecoleccion.crearRecoleccion(crearRecoleccionDto));
 
-        // Debug dirección remitente
-        if (crearRecoleccionDto.direccionRemitente() != null) {
-            System.out.println("Dirección remitente - Tipo vía: " + crearRecoleccionDto.direccionRemitente().tipoVia());
-            System.out.println("Dirección remitente - Ciudad: " + crearRecoleccionDto.direccionRemitente().ciudad());
-            System.out.println("Dirección remitente - Barrio: " + crearRecoleccionDto.direccionRemitente().barrio());
-        } else {
-            System.out.println("Dirección remitente es NULL");
+
+        if(!(recoleccionCreada == null)){
+            return ResponseEntity.status(201).body(recoleccionCreada);
+        }else{
+                return  ResponseEntity.internalServerError().body(recoleccionCreada);
         }
 
-        // Debug dirección destinatario
-        if (crearRecoleccionDto.direccionDestinatario() != null) {
-            System.out.println("Dirección destinatario - Tipo vía: " + crearRecoleccionDto.direccionDestinatario().tipoVia());
-            System.out.println("Dirección destinatario - Ciudad: " + crearRecoleccionDto.direccionDestinatario().ciudad());
-            System.out.println("Dirección destinatario - Barrio: " + crearRecoleccionDto.direccionDestinatario().barrio());
-        } else {
-            System.out.println("Dirección destinatario es NULL");
-        }
-
-        System.out.println("Fecha programada: " + crearRecoleccionDto.fechaHoraProgramadaRecoleccion());
-        System.out.println("Descripción paquete: " + crearRecoleccionDto.descripcionPaquete());
-        System.out.println("Peso: " + crearRecoleccionDto.pesoKg());
-        System.out.println("================================");
-
-        CrearRecoleccionDto recoleccionCreada = null;
-        try {
-            recoleccionCreada = recoleccionMapper.toActualizarRecolecciones(crearRecoleccion.crearRecoleccion(crearRecoleccionDto));
-          //  recoleccionCreada = crearRecoleccion.crearRecoleccion(crearRecoleccionDto);
-        } catch (Exception e) {
-            System.err.println("Error al crear recolección: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
-
-        if (recoleccionCreada != null) {
-            System.out.println("Recolección creada exitosamente: " + recoleccionCreada.idRecoleccion());
-            return ResponseEntity.status(HttpStatus.CREATED).body(recoleccionCreada);
-        } else {
-            System.err.println("La recolección creada es null");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
     }
 
     @GetMapping("/recolecciones/listarRecolecciones")

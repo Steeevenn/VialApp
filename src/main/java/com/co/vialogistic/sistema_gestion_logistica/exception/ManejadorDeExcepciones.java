@@ -2,6 +2,7 @@ package com.co.vialogistic.sistema_gestion_logistica.exception;
 
 import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.InvalidateEmailException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RolNotFoundException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotAdminException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,7 @@ public class ManejadorDeExcepciones {
 
     }
 
+    @ExceptionHandler(RolNotFoundException.class)
     public ResponseEntity<?> rolNotFoundEx(RolNotFoundException ex){
         return buildErrorResponse(
                 HttpStatus.NOT_FOUND,
@@ -49,6 +51,14 @@ public class ManejadorDeExcepciones {
     }
 
 
+    @ExceptionHandler(UsuarioNotAdminException.class)
+    public ResponseEntity<?> userNotAmdminEx(UsuarioNotAdminException ex){
+        return buildErrorResponse(
+                HttpStatus.UNAUTHORIZED,
+                "Usuario no es ADMINISTRADOR",
+                ex.getMessage()
+        );
+    }
 
 
 
