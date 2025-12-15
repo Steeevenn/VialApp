@@ -2,14 +2,13 @@ package com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores;
 
 import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ModificarDatosDestinatarioRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
-import com.co.vialogistic.sistema_gestion_logistica.service.ModificarDatosDestinatarioRecoleccion;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring" )
-public interface ModificacionDatosDestinatario {
+public interface ModificacionDatosDestinatarioMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "fechaHoraProgramadaRecoleccion", dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX")
     @Mapping(target = "estadoRecoleccion", ignore = true)

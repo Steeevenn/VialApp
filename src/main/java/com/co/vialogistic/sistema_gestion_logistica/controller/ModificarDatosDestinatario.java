@@ -1,7 +1,7 @@
     package com.co.vialogistic.sistema_gestion_logistica.controller;
 
     import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ModificarDatosDestinatarioRecoleccionDto;
-    import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.ModificacionDatosDestinatario;
+    import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.ModificacionDatosDestinatarioMapper;
     import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
     import com.co.vialogistic.sistema_gestion_logistica.service.ModificarDatosDestinatarioRecoleccion;
     import org.springframework.http.ResponseEntity;
@@ -14,11 +14,11 @@
 
 
      private final ModificarDatosDestinatarioRecoleccion modificarDatosDestinatario;
-     private final ModificacionDatosDestinatario  modificacionDatosDestinatario;
+     private final ModificacionDatosDestinatarioMapper modificacionDatosDestinatarioMapper;
 
-        public ModificarDatosDestinatario(ModificarDatosDestinatarioRecoleccion modificarDatosDestinatario, ModificacionDatosDestinatario modificacionDatosDestinatario) {
+        public ModificarDatosDestinatario(ModificarDatosDestinatarioRecoleccion modificarDatosDestinatario, ModificacionDatosDestinatarioMapper modificacionDatosDestinatarioMapper) {
             this.modificarDatosDestinatario = modificarDatosDestinatario;
-            this.modificacionDatosDestinatario = modificacionDatosDestinatario;
+            this.modificacionDatosDestinatarioMapper = modificacionDatosDestinatarioMapper;
         }
 
 
@@ -31,10 +31,9 @@
 
             Recoleccion recoleccionModificada = modificarDatosDestinatario.modificarRecoleccionCamposDestinatario(dto ,recoleccionId);
 
-
             // 2. Mapear la entidad final a DTO para la respuesta
             ModificarDatosDestinatarioRecoleccionDto modificacionRealizada =
-                    modificacionDatosDestinatario.toEntityRecoleccionDto(recoleccionModificada);
+                    modificacionDatosDestinatarioMapper.toEntityRecoleccionDto(recoleccionModificada);
 
             return ResponseEntity.ok(modificacionRealizada);
         }

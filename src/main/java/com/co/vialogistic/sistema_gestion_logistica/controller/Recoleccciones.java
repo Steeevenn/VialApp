@@ -4,6 +4,7 @@ import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearHistor
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaHistorialEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.wrappers.RespuestaRecoleccionesUsuarioAgendoDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.wrappers.RespuestaTotalRecoleccionesUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.EstadoRecoleccion;
@@ -69,11 +70,19 @@ public class Recoleccciones {
 //Controlador para listar el total de reccolecciones que un usuario agendo para posteriormente mostrar o devolver para asginar cada recoleccion
 
     @GetMapping("/listarRecolecciones/usuario")
-    public ResponseEntity<List<RespuestaListarRecoleccionesDto>> listarRecolecciones(@RequestParam Long idUsuarioAsignador){
+    public ResponseEntity<RespuestaRecoleccionesUsuarioAgendoDto> listarRecolecciones(@RequestParam Long idUsuarioAsignador){
         List<RespuestaListarRecoleccionesDto> recolecciones = gestionDeRecolecciones.ListaRecolecciones
                 (idUsuarioAsignador, EstadoRecoleccion.PENDIENTE_ASIGNACION);
 
-        return ResponseEntity.status(200).body(recolecciones);
+        String  estado = EstadoRecoleccion.PENDIENTE_ASIGNACION.name();
+
+        RespuestaRecoleccionesUsuarioAgendoDto response  = new RespuestaRecoleccionesUsuarioAgendoDto(
+                idUsuarioAsignador,
+                estado,
+                recolecciones
+        );
+
+        return ResponseEntity.status(200).body(response);
 
     }
 

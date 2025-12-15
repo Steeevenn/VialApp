@@ -1,5 +1,6 @@
 package com.co.vialogistic.sistema_gestion_logistica.exception;
 
+import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.DireccionNotExistException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RecoleccionNotExistException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.InvalidateEmailException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RolNotFoundException;
@@ -70,6 +71,15 @@ public class ManejadorDeExcepciones {
          );
     }
 
+    @ExceptionHandler(DireccionNotExistException.class)
+    public ResponseEntity<?> direccionNotExistEx(DireccionNotExistException ex) {
+
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                "DIRECCION NO EXISTE",
+                ex.getMessage()
+        );
+    }
     private ResponseEntity<Map<String, Object>> buildErrorResponse(
             HttpStatus status,
             String errorCode,
