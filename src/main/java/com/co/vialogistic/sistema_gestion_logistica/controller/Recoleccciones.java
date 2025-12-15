@@ -1,29 +1,23 @@
 package com.co.vialogistic.sistema_gestion_logistica.controller;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.CrearRecoleccionById;
-import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ModificarEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearHistorialEstadoDto;
-import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaCreacionRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaHistorialEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.wrappers.RespuestaTotalRecoleccionesUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
-import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.EstadoRecoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.repository.RecoleccionRepository;
 import com.co.vialogistic.sistema_gestion_logistica.service.*;
 import jakarta.validation.Valid;
 import org.springframework.http.*;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -61,10 +55,15 @@ public class Recoleccciones {
     }
 
     @GetMapping("/recolecciones/listarRecolecciones")
-    public ResponseEntity<List<RespuestaListarRecoleccionesDto>> listarRecolecciones() {
+    public ResponseEntity<RespuestaTotalRecoleccionesUsuarioDto> listarRecolecciones() {
 
         List<RespuestaListarRecoleccionesDto> recolecionesAll = gestionDeRecolecciones.listarRecoleccionesAll();
-        return ResponseEntity.ok(recolecionesAll);
+
+        RespuestaTotalRecoleccionesUsuarioDto response = new RespuestaTotalRecoleccionesUsuarioDto(
+                recolecionesAll
+        );
+
+        return ResponseEntity.ok(response);
 
     }
 //Controlador para listar el total de reccolecciones que un usuario agendo para posteriormente mostrar o devolver para asginar cada recoleccion

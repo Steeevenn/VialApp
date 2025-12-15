@@ -109,12 +109,9 @@ public class CrearRecoleccion implements CreacionDeRecoleccion {
         recoleccion.setLargoCm(crearRecoleccionDto.largoCm());
         recoleccion.setNotasAdministrador(crearRecoleccionDto.notasAdministrador());
 
-        if(recoleccion == null){
-
-        }
+        recoleccionRepository.save(recoleccion);
 
         //Guardar recoleccion en la bd
-        recoleccionRepository.save(recoleccion);
 
     return recoleccion;
     }
