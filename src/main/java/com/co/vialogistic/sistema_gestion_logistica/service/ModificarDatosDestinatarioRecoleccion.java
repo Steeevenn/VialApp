@@ -59,6 +59,7 @@ public class ModificarDatosDestinatarioRecoleccion {
                .map(Rol::getNombre)
                .anyMatch(rol -> rol == (RolNombre.ADMINISTRADOR));
 
+        // 2.1  Validar que la direccion exista en la base de datos y que la que se pase por parametro coincida con alguna previamente creada
         Long idDireccion = dto.direccionDestinatario().getId();
 
         Direccion direccion = direccionRepository.findById(idDireccion)
