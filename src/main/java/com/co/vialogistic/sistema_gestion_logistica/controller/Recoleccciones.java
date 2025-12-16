@@ -1,29 +1,24 @@
 package com.co.vialogistic.sistema_gestion_logistica.controller;
 
-import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.CrearRecoleccionById;
-import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ModificarEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearHistorialEstadoDto;
-import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaCreacionRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaHistorialEstadoRecoleccionDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaListarRecoleccionesDto;
 import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearRecoleccionDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.wrappers.RespuestaRecoleccionesUsuarioAgendoDto;
+import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.wrappers.RespuestaTotalRecoleccionesUsuarioDto;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.RecoleccionMapper;
-import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.EstadoRecoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.repository.RecoleccionRepository;
 import com.co.vialogistic.sistema_gestion_logistica.service.*;
 import jakarta.validation.Valid;
 import org.springframework.http.*;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -34,14 +29,15 @@ public class Recoleccciones {
     private final RecoleccionMapper recoleccionMapper;
     private final GestionDeRecolecciones gestionDeRecolecciones;
     private final HistorialEstadoService historialEstadoService;
+    private final RespuestaListarRecoleccion respuestaListarRecoleccion;
 
-    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper, GestionDeRecolecciones gestionDeRecolecciones, HistorialEstadoService historialEstadoService) {
+    public Recoleccciones(CrearRecoleccion crearRecoleccion, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper, GestionDeRecolecciones gestionDeRecolecciones, HistorialEstadoService historialEstadoService, RespuestaListarRecoleccion respuestaListarRecoleccion) {
         this.crearRecoleccion = crearRecoleccion;
         this.recoleccionRepository = recoleccionRepository;
         this.recoleccionMapper = recoleccionMapper;
         this.gestionDeRecolecciones = gestionDeRecolecciones;
         this.historialEstadoService = historialEstadoService;
-
+        this.respuestaListarRecoleccion = respuestaListarRecoleccion;
     }
 
 
@@ -50,7 +46,6 @@ public class Recoleccciones {
     public ResponseEntity<CrearRecoleccionDto> crearRecoleccion(@RequestBody @Valid CrearRecoleccionDto crearRecoleccionDto) {
 
         CrearRecoleccionDto recoleccionCreada = recoleccionMapper.toActualizarRecolecciones(crearRecoleccion.crearRecoleccion(crearRecoleccionDto));
-
 
         if(!(recoleccionCreada == null)){
             return ResponseEntity.status(201).body(recoleccionCreada);
@@ -61,30 +56,33 @@ public class Recoleccciones {
     }
 
     @GetMapping("/recolecciones/listarRecolecciones")
-    public ResponseEntity<List<RespuestaListarRecoleccionesDto>> listarRecolecciones() {
-        try {
-            List<Recoleccion> recolecciones = recoleccionRepository.findAll();
+    public ResponseEntity<RespuestaTotalRecoleccionesUsuarioDto> listarRecolecciones() {
 
-            // Mapear cada entidad a DTO usando el mapper
-            List<RespuestaListarRecoleccionesDto> respuestaListarRecoleccionesDtos = recolecciones.stream()
-                    .map(recoleccionMapper::toDto)
-                    .collect(Collectors.toList());
+        List<RespuestaListarRecoleccionesDto> recolecionesAll = gestionDeRecolecciones.listarRecoleccionesAll();
 
-            return ResponseEntity.ok(respuestaListarRecoleccionesDtos);
-        } catch (Exception e) {
-            // Manejar errores adecuadamente
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.emptyList());
-        }
+        RespuestaTotalRecoleccionesUsuarioDto response = new RespuestaTotalRecoleccionesUsuarioDto(
+                recolecionesAll
+        );
+
+        return ResponseEntity.ok(response);
+
     }
 //Controlador para listar el total de reccolecciones que un usuario agendo para posteriormente mostrar o devolver para asginar cada recoleccion
 
     @GetMapping("/listarRecolecciones/usuario")
-    public ResponseEntity<List<RespuestaListarRecoleccionesDto>> listarRecolecciones(@RequestParam Long idUsuarioAsignador){
+    public ResponseEntity<RespuestaRecoleccionesUsuarioAgendoDto> listarRecolecciones(@RequestParam Long idUsuarioAsignador){
         List<RespuestaListarRecoleccionesDto> recolecciones = gestionDeRecolecciones.ListaRecolecciones
                 (idUsuarioAsignador, EstadoRecoleccion.PENDIENTE_ASIGNACION);
 
-        return ResponseEntity.status(200).body(recolecciones);
+        String  estado = EstadoRecoleccion.PENDIENTE_ASIGNACION.name();
+
+        RespuestaRecoleccionesUsuarioAgendoDto response  = new RespuestaRecoleccionesUsuarioAgendoDto(
+                idUsuarioAsignador,
+                estado,
+                recolecciones
+        );
+
+        return ResponseEntity.status(200).body(response);
 
     }
 

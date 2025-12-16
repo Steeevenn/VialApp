@@ -11,7 +11,7 @@ public record ModificarDatosDestinatarioRecoleccionDto(
         @NotBlank Long domiciliarioAsignado,
         @NotBlank String nombreDestinatario,
         @NotBlank String telefonoDestinatario,
-        @NotNull Direccion direccionDestinatario,
+        @NotBlank Direccion direccionDestinatario,
         //Asegurara que la fecha que se cargue sea en el futuro
         @NotNull @Future OffsetDateTime fechaHoraProgramadaRecoleccion,
         @NotBlank String descripcionPaquete,

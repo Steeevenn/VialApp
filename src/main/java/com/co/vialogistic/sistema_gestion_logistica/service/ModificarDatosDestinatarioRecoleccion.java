@@ -1,7 +1,11 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 
 import com.co.vialogistic.sistema_gestion_logistica.dto.actualizaciones.ModificarDatosDestinatarioRecoleccionDto;
-import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.ModificacionDatosDestinatario;
+import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.DireccionNotExistException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RecoleccionNotExistException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotAdminException;
+import com.co.vialogistic.sistema_gestion_logistica.inferfaces.mapeadores.ModificacionDatosDestinatarioMapper;
+import com.co.vialogistic.sistema_gestion_logistica.model.entity.Direccion;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Rol;
 import com.co.vialogistic.sistema_gestion_logistica.model.entity.Usuario;
@@ -14,6 +18,8 @@ import com.co.vialogistic.sistema_gestion_logistica.service.validadores.UsuarioV
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ModificarDatosDestinatarioRecoleccion {
 
@@ -23,16 +29,19 @@ public class ModificarDatosDestinatarioRecoleccion {
     private final RoleRepository roleRepository;
     private final DireccionesRepository direccionesRepository;
     private final UsuarioValidador usuarioValidador;
-    private final ModificacionDatosDestinatario modificacionDatosDestinatario;
+    private final ModificacionDatosDestinatarioMapper modificacionDatosDestinatarioMapper;
+    private final DireccionesRepository direccionRepository;
 
 
-    public ModificarDatosDestinatarioRecoleccion(RecoleccionRepository recoleccionRepository, UsuarioRepository usuarioRepository, RoleRepository roleRepository, DireccionesRepository direccionesRepository, UsuarioValidador usuarioValidador, ModificacionDatosDestinatario modificacionDatosDestinatario) {
+    public ModificarDatosDestinatarioRecoleccion(RecoleccionRepository recoleccionRepository, UsuarioRepository usuarioRepository, RoleRepository roleRepository, DireccionesRepository direccionesRepository, UsuarioValidador usuarioValidador, ModificacionDatosDestinatarioMapper modificacionDatosDestinatarioMapper, DireccionesRepository direccionRepository)
+    {
         this.recoleccionRepository = recoleccionRepository;
         this.usuarioRepository = usuarioRepository;
         this.roleRepository = roleRepository;
         this.direccionesRepository = direccionesRepository;
         this.usuarioValidador = usuarioValidador;
-        this.modificacionDatosDestinatario = modificacionDatosDestinatario;
+        this.modificacionDatosDestinatarioMapper = modificacionDatosDestinatarioMapper;
+        this.direccionRepository = direccionRepository;
     }
 
 
@@ -46,25 +55,36 @@ public class ModificarDatosDestinatarioRecoleccion {
         System.out.println("Usuario que modifica encontrado: " + admin.getEmail());
 
         // 2. Validar que tenga rol ADMINISTRADOR
-
         boolean esAdmin = admin.getRoles().stream()
                .map(Rol::getNombre)
                .anyMatch(rol -> rol == (RolNombre.ADMINISTRADOR));
 
-        if (!esAdmin) {
-            throw new RuntimeException("El usuario no tiene permisos para modificar esta recolección");
+        // 2.1  Validar que la direccion exista en la base de datos y que la que se pase por parametro coincida con alguna previamente creada
+        Long idDireccion = dto.direccionDestinatario().getId();
+
+        Direccion direccion = direccionRepository.findById(idDireccion)
+                .orElseThrow(() -> new DireccionNotExistException(
+                        "La dirección con id " + idDireccion + " no existe"
+                ));
+
+
+        System.out.println("el id de direccion del dto es : " + dto.direccionDestinatario().getId());
+        System.out.println("el id de la direccion de la entidad direccion es :" + direccion);
+
+
+        if (!esAdmin ) {
+            throw new UsuarioNotAdminException("El usuario no tiene permisos para modificar esta recolección");
         }
 
         // 3. Buscar la recolección a modificar
         Recoleccion recoleccion = recoleccionRepository.findById(recoleccionId)
-                .orElseThrow(() -> new RuntimeException("La recolección no existe"));
+                .orElseThrow(() -> new RecoleccionNotExistException("La recolección buscada no existe en los registros"));
 
         // 4. Actualizar la entidad existente usando el mapper
-        modificacionDatosDestinatario.updateFromDto(dto, recoleccion);
+        modificacionDatosDestinatarioMapper.updateFromDto(dto, recoleccion);
 
         //5. Setear manualmente campo de domiciliario
         Usuario domiciliario = usuarioValidador.obtenerOrThrow(dto.domiciliarioAsignado());
-
         recoleccion.setDomiciliarioAsginado(domiciliario);
 
         // 6. Guardar cambios
