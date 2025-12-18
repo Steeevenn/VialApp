@@ -33,6 +33,7 @@ public class CrearUsuario implements CreacionDeUsuario {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
     // métodos para crear usuarios, por ejemplo:
 
     @Transactional
