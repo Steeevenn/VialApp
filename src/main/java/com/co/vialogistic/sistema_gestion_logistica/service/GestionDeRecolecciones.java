@@ -11,6 +11,7 @@ import com.co.vialogistic.sistema_gestion_logistica.model.enums.EstadoRecoleccio
 import com.co.vialogistic.sistema_gestion_logistica.model.enums.RolNombre;
 import com.co.vialogistic.sistema_gestion_logistica.repository.RecoleccionRepository;
 import com.co.vialogistic.sistema_gestion_logistica.repository.UsuarioRepository;
+import com.co.vialogistic.sistema_gestion_logistica.service.validadores.UsuarioValidador;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -25,21 +26,20 @@ public class GestionDeRecolecciones {
     private final UsuarioRepository usuarioRepository;
     private final RecoleccionRepository recoleccionRepository;
     private final RecoleccionMapper recoleccionMapper;
+    private final UsuarioValidador usuarioValidador;
 
-    public GestionDeRecolecciones(UsuarioRepository usuarioRepository, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper) {
+    public GestionDeRecolecciones(UsuarioRepository usuarioRepository, RecoleccionRepository recoleccionRepository, RecoleccionMapper recoleccionMapper, UsuarioValidador usuarioValidador) {
         this.usuarioRepository = usuarioRepository;
         this.recoleccionRepository = recoleccionRepository;
         this.recoleccionMapper = recoleccionMapper;
+        this.usuarioValidador = usuarioValidador;
     }
     @Transactional
     public void AsignarRecoleccionAUsuario(Long idUsuarioQueAsigno, Long idDomiciliario, Long idRecoleccion) {
 
         // 1. Validar existencia del domiciliario
-        Usuario domiciliario = usuarioRepository.findById(idDomiciliario)
-                .stream().filter(r -> r.getRoles().stream()
-                        .anyMatch(rol -> rol.getNombre().equals(RolNombre.DOMICILIARIO)))
-                .findFirst()
-                .orElseThrow(()->new  AgendadorDeDomiciliarioException(idDomiciliario));
+
+     Usuario domiciliario =  usuarioValidador.validarRolDomiciliario(idDomiciliario);
 
 
         List<Recoleccion> recoleccionFiltrada = recoleccionRepository.listarRecoleccionesPorUsuario(idUsuarioQueAsigno,EstadoRecoleccion.PENDIENTE_ASIGNACION)
@@ -50,7 +50,7 @@ public class GestionDeRecolecciones {
         // 2. Verificar si se encontró la recolección
         if (recoleccionFiltrada.isEmpty()) {
             throw new AgendadorDeDomiciliarioException(
-                    "Recolección no encontrada o no está pendiente de asignación para este usuario"
+                    "Recolección no encontrada o no está pendiente de asignación para este usuario o esta recoleccion no pertece a este usuario " + idUsuarioQueAsigno
             );
         }
 
@@ -66,12 +66,13 @@ public class GestionDeRecolecciones {
 
     public List<RespuestaListarRecoleccionesDto> ListaRecolecciones(Long idUsuarioQueAsigno, EstadoRecoleccion estadoRecoleccion ){
 
-        return recoleccionRepository.listarRecoleccionesPorUsuario(idUsuarioQueAsigno,EstadoRecoleccion.PENDIENTE_ASIGNACION).stream()
+        return recoleccionRepository.listarRecoleccionesPorUsuario(idUsuarioQueAsigno,estadoRecoleccion).stream()
                 .map(recoleccionMapper::toDto)
                 .collect(Collectors.toList());
 
     }
 
+    //Servicion para listar el total de recolecciones
     public List<RespuestaListarRecoleccionesDto> listarRecoleccionesAll(){
 
         List<Recoleccion> listaRecoleccionesTotal = recoleccionRepository.findAll();
@@ -79,11 +80,9 @@ public class GestionDeRecolecciones {
             throw new RecoleccionNotExistException("No hay recolecciones asignadas");
         }
 
-        List <RespuestaListarRecoleccionesDto> respuestaListaRecoleccionesDto = listaRecoleccionesTotal.stream()
+        return listaRecoleccionesTotal.stream()
                 .map(recoleccionMapper::toDto)
                 .toList();
-
-        return respuestaListaRecoleccionesDto;
 
     }
 
