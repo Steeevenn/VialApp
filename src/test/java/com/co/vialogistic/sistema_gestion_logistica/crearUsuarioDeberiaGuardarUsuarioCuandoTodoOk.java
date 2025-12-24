@@ -28,7 +28,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-
 public class crearUsuarioDeberiaGuardarUsuarioCuandoTodoOk {
 
     // 1 Inyectar el repositorio como MOCK

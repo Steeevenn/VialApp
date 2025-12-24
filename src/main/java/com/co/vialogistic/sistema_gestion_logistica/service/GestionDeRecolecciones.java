@@ -72,7 +72,7 @@ public class GestionDeRecolecciones {
 
     }
 
-    //Servicion para listar el total de recolecciones
+    //Servicio para listar el total de recolecciones
     public List<RespuestaListarRecoleccionesDto> listarRecoleccionesAll(){
 
         List<Recoleccion> listaRecoleccionesTotal = recoleccionRepository.findAll();
