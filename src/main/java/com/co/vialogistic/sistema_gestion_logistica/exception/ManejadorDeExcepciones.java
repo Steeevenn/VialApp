@@ -1,5 +1,6 @@
 package com.co.vialogistic.sistema_gestion_logistica.exception;
 
+import com.co.vialogistic.sistema_gestion_logistica.exception.archivosAdjuntos.ArchivoAdjuntoNotSaveException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.DireccionNotExistException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RecoleccionNotExistException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.InvalidateEmailException;
@@ -80,6 +81,18 @@ public class ManejadorDeExcepciones {
                 ex.getMessage()
         );
     }
+
+
+
+    @ExceptionHandler(ArchivoAdjuntoNotSaveException.class)
+    public  ResponseEntity<?> archivoAdjuntoNotFound(ArchivoAdjuntoNotSaveException ex){
+               return buildErrorResponse(
+                       HttpStatus.NOT_FOUND,
+                       "ARCHIVO NO VALIDO",
+                       ex.getMessage()
+               );
+    }
+
     private ResponseEntity<Map<String, Object>> buildErrorResponse(
             HttpStatus status,
             String errorCode,

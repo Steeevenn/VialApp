@@ -44,7 +44,7 @@ public class asignacionDeRecoleccionConValidacionDeUsuarioAsignador {
     @Test
     void asignarRecoleccionAUsuario_deberiaAsignarDomiciliarioYCambiarEstadoYGuardar() {
 
-// ARRANGE
+        // ARRANGE
         Long idUsuarioQueAsigno = 10L;
         Long idDomiciliario = 20L;
         Long idRecoleccion = 30L;
@@ -68,15 +68,14 @@ public class asignacionDeRecoleccionConValidacionDeUsuarioAsignador {
         verify(usuarioValidador).validarRolDomiciliario(idDomiciliario);
         verify(recoleccionRepository).listarRecoleccionesPorUsuario(idUsuarioQueAsigno, EstadoRecoleccion.PENDIENTE_ASIGNACION);
 
-        // Tu service guarda con saveAll (por el log anterior). Verificamos el contenido guardado:
+        // Service se guarda con saveAll si en algun momento cambia por save se debe modificar el test para que no quede fallido
         verify(recoleccionRepository).saveAll(argThat((ArgumentMatcher<List<Recoleccion>>) list ->
                 list != null
                         && list.size() == 1
                         && list.getFirst() != null
                         && idRecoleccion.equals(list.getFirst().getId())
                         && list.getFirst().getEstadoRecoleccion() == EstadoRecoleccion.ASIGNADA
-                        && list.getFirst().getDomiciliarioAsginado() != null
-                        && idDomiciliario.equals(list.getFirst().getDomiciliarioAsginado().getId())
+                        && list.getFirst().getDomiciliarioAsginado() != null && idDomiciliario.equals(list.getFirst().getDomiciliarioAsginado().getId())
         ));
 
         verifyNoMoreInteractions(usuarioValidador, recoleccionRepository);
