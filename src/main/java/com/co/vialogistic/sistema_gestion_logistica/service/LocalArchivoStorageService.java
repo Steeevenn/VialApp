@@ -1,5 +1,7 @@
 package com.co.vialogistic.sistema_gestion_logistica.service;
 
+import com.co.vialogistic.sistema_gestion_logistica.exception.archivosAdjuntos.ArchivoAdjuntoNotSaveException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.archivosAdjuntos.TamanoNoValidoParaArchivoException;
 import com.co.vialogistic.sistema_gestion_logistica.inferfaces.creacionales.ArchivoStorageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -9,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.UUID;
@@ -22,25 +23,33 @@ public class LocalArchivoStorageService implements ArchivoStorageService {
 
     @Override
     public String guardarArchivo(MultipartFile file, String subfolder) {
-        try {
-            // Generar un nombre de archivo único para evitar colisiones
+
+            // Generar un nombre de archivo único para evitar colisiones reemplazando los espacions en blanco por guion bajo para mayor claridad
             String originalFilename = StringUtils.cleanPath((Objects.requireNonNull(file.getOriginalFilename()).replaceAll("\\s+", "_")));
+            //A traves de la clase UUID me genera un identificador unico para incializar mis archivos con un  unico nombre
             String uniqueFilename = UUID.randomUUID() + "_" + originalFilename;
 
             //  Version del get deprecada validar funciionamiento
             //  Path uploadPath = Paths.get(uploadDir, subfolder);
-            Path uploadPath = Path.of(uploadDir, uniqueFilename);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+            Path uploadPath = Path.of(uploadDir, subfolder);
+           //Se crea la carpeta con la ruta marcada
+            try{
+                Files.createDirectories(uploadPath);}
+            catch (IOException ex){
+                throw new ArchivoAdjuntoNotSaveException("No se pudo guardar el archivo" + ex.getMessage());
             }
-
             Path filePath = uploadPath.resolve(uniqueFilename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Devuelve una ruta relativa que puedas convertir en URL
-            return subfolder + "/" + uniqueFilename;
-        } catch (IOException ex) {
-            throw new RuntimeException("No se pudo guardar el archivo. Error: " + ex.getMessage());
+        try {
+            // Se encarga de copiar por medio de la tuberia del getinputstream el file que llego por http a mi ruta destino que en este caso es filePaht.
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new ArchivoAdjuntoNotSaveException("no se puede guardar el archivo correctamente tamño del archivo no valido  " + e.getMessage());
         }
+
+        // Devuelve una ruta relativa que puedas convertir en URL
+            return subfolder + "/" + uniqueFilename;
+
+
     }
 }

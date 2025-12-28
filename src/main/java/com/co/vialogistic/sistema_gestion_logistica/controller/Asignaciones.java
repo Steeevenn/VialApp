@@ -21,7 +21,7 @@ public class Asignaciones{
     }
 //Controlador que asigna un domiciliario a un id de recoleccion especifica
 
-    @PostMapping("/asignar")
+    @PostMapping("/asignar/recoleccion/domiciliario")
     public ResponseEntity<?> asignarRecolecciones(
             @RequestParam Long idUsuarioAsignador,
             @RequestParam Long idDomiciliario,

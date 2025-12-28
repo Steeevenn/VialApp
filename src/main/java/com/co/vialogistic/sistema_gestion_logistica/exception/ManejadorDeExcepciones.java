@@ -1,5 +1,7 @@
 package com.co.vialogistic.sistema_gestion_logistica.exception;
 
+import com.co.vialogistic.sistema_gestion_logistica.exception.archivosAdjuntos.ArchivoAdjuntoNotSaveException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.archivosAdjuntos.TamanoNoValidoParaArchivoException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.DireccionNotExistException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RecoleccionNotExistException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.InvalidateEmailException;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MultipartException;
 
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -80,6 +83,40 @@ public class ManejadorDeExcepciones {
                 ex.getMessage()
         );
     }
+
+
+
+    @ExceptionHandler(ArchivoAdjuntoNotSaveException.class)
+    public  ResponseEntity<?> archivoAdjuntoNotFound(ArchivoAdjuntoNotSaveException ex){
+               return buildErrorResponse(
+                       HttpStatus.NOT_FOUND,
+                       "ARCHIVO NO VALIDO",
+                       ex.getMessage()
+               );
+    }
+
+    @ExceptionHandler(TamanoNoValidoParaArchivoException.class)
+    public ResponseEntity<?> tamañoEnBytesNoValidoParaArchivoAdjunto(TamanoNoValidoParaArchivoException ex){
+        return buildErrorResponse(
+                HttpStatus.PAYLOAD_TOO_LARGE,
+                "TAMAÑO INVALIDO",
+                ex.getMessage()
+        );
+
+    }
+   @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<?> multipartExceptionHandler(MultipartException ex){
+
+        return buildErrorResponse(
+                HttpStatus.PAYLOAD_TOO_LARGE,
+                "ARCHIVO ENVIADO DEMASIADO GRANDE MAX 15 MB",
+                ex.getMessage()
+
+        );
+
+   }
+
+
     private ResponseEntity<Map<String, Object>> buildErrorResponse(
             HttpStatus status,
             String errorCode,

@@ -33,7 +33,7 @@ public class ArchivosAdjuntos {
      @PutMapping("/adjuntarArchivo")
     public ResponseEntity<String> actualizarArchivos(ArchivosAdjuntosDto archvivosAdjuntosDto, MultipartFile archivo) {
 
-//Llamada a servicio para generar los archvios en local y guardar la referencia a la base de datos
+//Llamada a servicio para generar los archvios en local y GUARDAR LA REFERENCIA EN LA BASE DE DATOS
 
         gestionarArchivosAdjuntos.AgregarArchivosAdjuntosARecoleccion(
                  archvivosAdjuntosDto.recoleccionId(),
@@ -42,7 +42,7 @@ public class ArchivosAdjuntos {
                  archvivosAdjuntosDto.domiciliarioQueSube(),
                  archvivosAdjuntosDto.notasDomiciliario()
          );
-         return ResponseEntity.status(HttpStatus.CREATED).body("Archivo adjunto creado correctamente");
+         return ResponseEntity.status(HttpStatus.CREATED).body("Archivo adjunto agregado correctamente");
      }
 
    @GetMapping("/archivosAdjuntos/{recoleccionId}")
