@@ -88,6 +88,7 @@ public class Recoleccciones {
 
 
 /* endpoint para modificar estado de las recolecciones y que automaticamente se suban los estados a estados de recoleccion*/
+
     @PutMapping("recolecciones/{recoleccionId}/modificar/estado")
     public ResponseEntity<RespuestaHistorialEstadoRecoleccionDto> modificarEstadosRecoleccion (@PathVariable Long recoleccionId,
              @Valid @RequestBody CrearHistorialEstadoDto crearHistorialEstadoDto){
