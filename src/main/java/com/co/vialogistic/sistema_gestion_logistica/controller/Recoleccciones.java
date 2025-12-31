@@ -88,9 +88,11 @@ public class Recoleccciones {
 
 
 /* endpoint para modificar estado de las recolecciones y que automaticamente se suban los estados a estados de recoleccion*/
+
     @PutMapping("recolecciones/{recoleccionId}/modificar/estado")
     public ResponseEntity<RespuestaHistorialEstadoRecoleccionDto> modificarEstadosRecoleccion (@PathVariable Long recoleccionId,
              @Valid @RequestBody CrearHistorialEstadoDto crearHistorialEstadoDto){
+
         //Validar que el idRecoleccion sea coherente en el parametro del metodo y lo que llega desde fuera
         if(!Objects.equals(recoleccionId, crearHistorialEstadoDto.recoleccionId())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"La recoleccionId de la ruta no coincide con el id del cuerpo ");

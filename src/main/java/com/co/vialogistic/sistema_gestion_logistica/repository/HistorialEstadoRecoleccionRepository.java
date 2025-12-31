@@ -12,4 +12,6 @@ public interface HistorialEstadoRecoleccionRepository extends JpaRepository<Hist
 
     Optional<HistorialEstadoRecoleccion> findByIdAndRecoleccionId( Long recoleccionId, Long estadoId);
 
+    Optional<HistorialEstadoRecoleccion> findTopByRecoleccionIdOrderByTimestampCambioDesc(Long recoleccionId);
+
 }
