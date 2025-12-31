@@ -4,6 +4,7 @@ import com.co.vialogistic.sistema_gestion_logistica.exception.archivosAdjuntos.A
 import com.co.vialogistic.sistema_gestion_logistica.exception.archivosAdjuntos.TamanoNoValidoParaArchivoException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.DireccionNotExistException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RecoleccionNotExistException;
+import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.historialEstadosRecoleccion.TransicionNoPermitidaException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.InvalidateEmailException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RolNotFoundException;
 import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotAdminException;
@@ -114,6 +115,16 @@ public class ManejadorDeExcepciones {
 
         );
 
+   }
+
+   @ExceptionHandler(TransicionNoPermitidaException.class)
+   public ResponseEntity<?> transicionNoValida(TransicionNoPermitidaException ex){
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                "CAMBIO DE ESTADO INVALIDO",
+                ex.getMessage()
+
+        );
    }
 
 

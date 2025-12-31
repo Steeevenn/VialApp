@@ -3,6 +3,7 @@
     import com.co.vialogistic.sistema_gestion_logistica.dto.creacionales.CrearHistorialEstadoDto;
     import com.co.vialogistic.sistema_gestion_logistica.dto.respuestas.RespuestaHistorialEstadoRecoleccionDto;
     import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.RecoleccionNotExistException;
+    import com.co.vialogistic.sistema_gestion_logistica.exception.recolecciones.historialEstadosRecoleccion.TransicionNoPermitidaException;
     import com.co.vialogistic.sistema_gestion_logistica.exception.usuario.UsuarioNotFoundException;
     import com.co.vialogistic.sistema_gestion_logistica.model.entity.HistorialEstadoRecoleccion;
     import com.co.vialogistic.sistema_gestion_logistica.model.entity.Recoleccion;
@@ -24,13 +25,15 @@
         private final HistorialEstadoRecoleccionRepository historialRepository;
         private final RecoleccionRepository recoleccionRepository;
         private final UsuarioRepository usuarioRepository;
+        private final HistorialEstadoRecoleccionRepository  historialEstadoRecoleccion;
 
         public HistorialEstadoService(HistorialEstadoRecoleccionRepository historialRepository,
                                       RecoleccionRepository recoleccionRepository,
-                                      UsuarioRepository usuarioRepository) {
+                                      UsuarioRepository usuarioRepository, HistorialEstadoRecoleccionRepository historialEstadoRecoleccion) {
             this.historialRepository = historialRepository;
             this.recoleccionRepository = recoleccionRepository;
             this.usuarioRepository = usuarioRepository;
+            this.historialEstadoRecoleccion = historialEstadoRecoleccion;
         }
 
 
@@ -53,25 +56,27 @@
                 orElseThrow( () -> new RecoleccionNotExistException("No se encontro el recoleccion con el id proporcionado"));
 
 
-             EstadoRecoleccion  dtoEstadoAnterior = dto.estadoAnterior();
-             EstadoRecoleccion actual = recoleccion.getEstadoRecoleccion();
+            EstadoRecoleccion actual = recoleccion.getEstadoRecoleccion();
              EstadoRecoleccion dtoEstadoNuevo= dto.estadoNuevo();
+            EstadoRecoleccion estadoAnterior = historialEstadoRecoleccion.findTopByRecoleccionIdOrderByTimestampCambioDesc(dto.recoleccionId())
+                    .map(HistorialEstadoRecoleccion::getEstadoAnterior)
+                    .orElse(actual);
 
-             //Validacion inicial para que conicida lo que viene del dto a lo que hay en la base de datos
-          //   if(actual != dtoEstadoAnterior){
-            //     throw new IllegalArgumentException("ESTADO ANTERIOR NO COINCIDE CON EL ESTADO ACTUAL= " + actual + " DTO= " + dtoEstadoAnterior);
-             //}
+
+             // Validacion inicial para que  lo que viene del dto y lo que hay  en la base de datos no sean iguales ya que no habria que modificar estado
+               if(estadoAnterior == actual){
+                 throw new IllegalArgumentException("ESTADO ANTERIOR NO COINCIDE CON EL ESTADO ACTUAL= " + actual + " ESTADO ANTERIOR= " + estadoAnterior);
+             }
 
              //Validacion desde el service para cumplir regla de negocio trancisiones validad
              if(!actual.puedeCambiarEstadoRecoleccionSi(dtoEstadoNuevo)){
-                 throw new IllegalArgumentException("TRANCISION NO PERMITIDA ACTUAL= " + actual + " NUEVO = " + dtoEstadoAnterior);
-
+                 throw new TransicionNoPermitidaException("TRANCISION NO PERMITIDA ACTUAL= " + actual + " NUEVO = " + dtoEstadoNuevo);
              }
 
-            // Validacion para se ponga motivo cambio obligatorio
+            // Validacion para que se ponga motivo cambio obligatorio cuando es una incidencia en la recoleccion
             if (dtoEstadoNuevo == EstadoRecoleccion.INCIDENCIA_RECOLECCION &&
                     (dto.motivoCambio() == null || dto.motivoCambio().isBlank())) {
-                throw new IllegalArgumentException("Debe indicar un motivo para la incidencia.");
+                throw new TransicionNoPermitidaException("Debe indicar un motivo para la incidencia.");
             }
 
 
@@ -100,7 +105,6 @@
             HistorialEstadoRecoleccion saved = historialRepository.save(historialEstadoRecoleccion);
 
 
-
             return toResponseDto(saved);
 
         }
@@ -115,7 +119,6 @@
                     .collect(Collectors.toList());
 
         }
-
 
 
         private RespuestaHistorialEstadoRecoleccionDto toResponseDto(HistorialEstadoRecoleccion historial) {

@@ -10,8 +10,6 @@ public record CrearHistorialEstadoDto(
         @NotNull (message = "ID de recoleccion obligatorio")
         Long recoleccionId,
 
-        EstadoRecoleccion estadoAnterior,
-
         @NotNull(message = "Estado nuevo obligatorio")
         EstadoRecoleccion estadoNuevo,
 
